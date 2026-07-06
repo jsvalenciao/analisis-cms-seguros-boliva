@@ -1,0 +1,864 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Evaluación Integral CMS - Seguros Bolívar</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-base: #009056;
+            --primary-dark: #038450;
+            --primary-light: #66BC9A;
+            --secondary-base: #FFE16F;
+            --bg-light: #f5f5f5;
+            --text-primary: #333333;
+            --text-secondary: #666666;
+            --border-color: #e0e0e0;
+            --success: #28a745;
+            --warning: #ffc107;
+            --error: #dc3545;
+            --info: #17a2b8;
+            --spacing-xs: 4px;
+            --spacing-sm: 8px;
+            --spacing-md: 16px;
+            --spacing-lg: 24px;
+            --spacing-xl: 32px;
+            --spacing-xxl: 48px;
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.1);
+            --shadow-md: 0 2px 8px rgba(0,0,0,0.1);
+            --shadow-lg: 0 4px 16px rgba(0,0,0,0.15);
+            --radius-sm: 4px;
+            --radius-md: 8px;
+            --radius-lg: 12px;
+            --radius-full: 9999px;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Roboto', sans-serif; font-size: 1rem; font-weight: 400; color: var(--text-primary); background: var(--bg-light); line-height: 1.6; }
+        h1, h2, h3, h4 { font-family: 'Roboto', sans-serif; font-weight: 700; }
+        h1 { font-size: 2.2rem; } h2 { font-size: 1.6rem; } h3 { font-size: 1.25rem; } h4 { font-size: 1.05rem; }
+        .header { background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary-base) 100%); color: white; padding: var(--spacing-xxl) var(--spacing-lg); text-align: center; position: relative; overflow: hidden; }
+        .header::after { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 4px; background: var(--secondary-base); }
+        .header h1 { margin-bottom: var(--spacing-sm); }
+        .header p { opacity: 0.9; font-size: 1.1rem; font-weight: 300; }
+        .header .meta { margin-top: var(--spacing-md); font-size: 0.85rem; opacity: 0.75; }
+        .nav { background: white; border-bottom: 1px solid var(--border-color); padding: 0 var(--spacing-lg); position: sticky; top: 0; z-index: 100; box-shadow: var(--shadow-sm); }
+        .nav-inner { max-width: 1200px; margin: 0 auto; display: flex; gap: 2px; overflow-x: auto; flex-wrap: wrap; justify-content: center; }
+        .nav-inner::-webkit-scrollbar { height: 3px; }
+        .nav-inner::-webkit-scrollbar-thumb { background: var(--primary-light); border-radius: 3px; }
+        .nav-btn { padding: var(--spacing-sm) var(--spacing-md); border: none; background: none; font-family: 'Roboto', sans-serif; font-size: 0.8rem; font-weight: 500; color: var(--text-secondary); cursor: pointer; white-space: nowrap; border-bottom: 3px solid transparent; transition: all 0.2s ease; }
+        .nav-btn:hover { color: var(--primary-base); }
+        .nav-btn.active { color: var(--primary-base); border-bottom-color: var(--primary-base); }
+        .nav-scroll-hint { position: relative; }
+        .nav-scroll-hint::after { content: '→'; position: absolute; right: 0; top: 50%; transform: translateY(-50%); background: linear-gradient(to right, transparent, white 40%); padding-left: 20px; padding-right: 8px; color: var(--text-secondary); font-size: 0.9rem; pointer-events: none; display: none; }
+        @media (max-width: 1100px) { .nav-scroll-hint::after { display: block; } }
+        .main { max-width: 1200px; margin: 0 auto; padding: var(--spacing-xl) var(--spacing-lg); }
+        .section { display: none; animation: fadeIn 0.3s ease; }
+        .section.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+        .card { background: white; border-radius: var(--radius-lg); box-shadow: var(--shadow-md); padding: var(--spacing-xl); margin-bottom: var(--spacing-lg); border: 1px solid var(--border-color); transition: box-shadow 0.2s ease; }
+        .card:hover { box-shadow: var(--shadow-lg); }
+        .card h3 { color: var(--primary-dark); margin-bottom: var(--spacing-md); }
+        .card p { color: var(--text-secondary); margin-bottom: var(--spacing-md); }
+        .rating { display: inline-flex; gap: 3px; }
+        .dot { width: 14px; height: 14px; border-radius: 50%; display: inline-block; }
+        .dot.filled { background: var(--primary-base); }
+        .dot.empty { background: var(--border-color); }
+        .dot.na { background: #bdbdbd; border: 2px dashed #9e9e9e; }
+        .table-wrapper { overflow-x: auto; border-radius: var(--radius-lg); box-shadow: var(--shadow-md); margin-bottom: var(--spacing-lg); }
+        table { width: 100%; border-collapse: collapse; background: white; font-size: 0.875rem; }
+        thead th { background: var(--primary-dark); color: white; padding: var(--spacing-md); text-align: center; font-weight: 500; }
+        thead th:first-child { text-align: left; min-width: 220px; }
+        tbody td { padding: var(--spacing-md); border-bottom: 1px solid var(--border-color); text-align: center; vertical-align: middle; }
+        tbody td:first-child { text-align: left; font-weight: 500; }
+        tbody tr:hover td { background: #f0faf5; }
+        .cap-name { cursor: pointer; color: var(--primary-dark); border-bottom: 1px dashed var(--primary-light); }
+        .cap-name:hover { color: var(--primary-base); }
+        .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 1000; justify-content: center; align-items: center; padding: var(--spacing-lg); }
+        .modal-overlay.active { display: flex; }
+        .modal { background: white; border-radius: var(--radius-lg); max-width: 600px; width: 100%; max-height: 80vh; overflow-y: auto; padding: var(--spacing-xl); position: relative; box-shadow: var(--shadow-lg); }
+        .modal h3 { color: var(--primary-dark); margin-bottom: var(--spacing-md); }
+        .modal p { color: var(--text-secondary); line-height: 1.7; }
+        .modal-close { position: absolute; top: var(--spacing-md); right: var(--spacing-md); background: none; border: none; font-size: 1.5rem; cursor: pointer; color: var(--text-secondary); width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; border-radius: var(--radius-full); transition: background 0.2s; }
+        .modal-close:hover { background: var(--bg-light); }
+        .cost-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: var(--spacing-lg); margin-bottom: var(--spacing-lg); }
+        .cost-card { background: white; border-radius: var(--radius-lg); box-shadow: var(--shadow-md); border: 1px solid var(--border-color); overflow: hidden; transition: transform 0.2s, box-shadow 0.2s; }
+        .cost-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-lg); }
+        .cost-card-header { padding: var(--spacing-lg); color: white; text-align: center; }
+        .cost-card-header h3 { color: white; margin-bottom: var(--spacing-xs); font-size: 1.1rem; }
+        .cost-card-header .price { font-size: 1.8rem; font-weight: 700; }
+        .cost-card-header .price-sub { font-size: 0.8rem; opacity: 0.85; }
+        .cost-card-body { padding: var(--spacing-lg); }
+        .cost-card-body ul { list-style: none; }
+        .cost-card-body li { padding: var(--spacing-sm) 0; border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between; font-size: 0.875rem; }
+        .cost-card-body li:last-child { border-bottom: none; }
+        .cost-card-body li span:last-child { font-weight: 500; }
+        .badge { display: inline-block; padding: 2px 10px; border-radius: var(--radius-full); font-size: 0.75rem; font-weight: 500; }
+        .badge-green { background: #e6f7ef; color: var(--primary-dark); }
+        .badge-yellow { background: #fff8e1; color: #856404; }
+        .badge-red { background: #fde8e8; color: #c62828; }
+        .badge-blue { background: #e3f2fd; color: #1565c0; }
+        .badge-gray { background: #f5f5f5; color: #616161; }
+        .analyst-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: var(--spacing-lg); }
+        .analyst-card { background: white; border-radius: var(--radius-lg); box-shadow: var(--shadow-md); padding: var(--spacing-xl); border-left: 4px solid var(--primary-base); }
+        .analyst-card h4 { margin-bottom: var(--spacing-sm); }
+        .analyst-card .source { font-size: 0.8rem; color: var(--text-secondary); margin-top: var(--spacing-md); }
+        .analyst-card a { color: var(--primary-base); text-decoration: none; }
+        .analyst-card a:hover { text-decoration: underline; }
+        .alert { padding: var(--spacing-lg); border-radius: var(--radius-md); margin-bottom: var(--spacing-lg); display: flex; gap: var(--spacing-md); align-items: flex-start; }
+        .alert-warning { background: #fff8e1; border: 1px solid #ffe082; }
+        .alert-info { background: #e3f2fd; border: 1px solid #90caf9; }
+        .alert-icon { font-size: 1.5rem; flex-shrink: 0; }
+        .alert p { font-size: 0.9rem; color: var(--text-secondary); }
+        .filter-bar { display: flex; gap: var(--spacing-sm); flex-wrap: wrap; margin-bottom: var(--spacing-lg); }
+        .chip { padding: var(--spacing-sm) var(--spacing-md); border-radius: var(--radius-full); border: 1px solid var(--border-color); background: white; font-size: 0.8rem; font-family: 'Roboto', sans-serif; cursor: pointer; transition: all 0.2s; }
+        .chip:hover { border-color: var(--primary-light); }
+        .chip.active { background: var(--primary-base); color: white; border-color: var(--primary-base); }
+        .recommendation { background: linear-gradient(135deg, var(--primary-dark), var(--primary-base)); color: white; border-radius: var(--radius-lg); padding: var(--spacing-xl); margin-top: var(--spacing-lg); }
+        .recommendation h3 { color: var(--secondary-base); margin-bottom: var(--spacing-md); }
+        .recommendation p { opacity: 0.95; line-height: 1.7; }
+        .source-list { list-style: none; }
+        .source-list li { padding: var(--spacing-md); border-bottom: 1px solid var(--border-color); display: flex; gap: var(--spacing-md); align-items: flex-start; }
+        .source-list li:last-child { border-bottom: none; }
+        .source-num { background: var(--primary-base); color: white; width: 28px; height: 28px; border-radius: var(--radius-full); display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 700; flex-shrink: 0; }
+        .source-list a { color: var(--primary-base); text-decoration: none; word-break: break-all; }
+        .source-list a:hover { text-decoration: underline; }
+        .source-date { font-size: 0.75rem; color: var(--text-secondary); }
+        .finding-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: var(--spacing-md); margin: var(--spacing-md) 0; }
+        .finding-card { padding: var(--spacing-md); border-radius: var(--radius-sm); }
+        .finding-card strong { display: block; margin-bottom: 4px; }
+        .finding-card p { font-size: 0.85rem; margin-top: 4px; }
+        .scenario-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: var(--spacing-lg); margin-top: var(--spacing-lg); }
+        @media (max-width: 768px) { h1 { font-size: 1.6rem; } .header { padding: var(--spacing-xl) var(--spacing-md); } .main { padding: var(--spacing-md); } .cost-grid { grid-template-columns: 1fr; } .analyst-grid { grid-template-columns: 1fr; } .nav-btn { padding: var(--spacing-sm) var(--spacing-md); font-size: 0.8rem; } }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <h1>Evaluación Integral CMS — Seguros Bolívar</h1>
+        <p>Análisis comparativo de capacidades, costos, posicionamiento de analistas y propuesta In-House</p>
+        <div class="meta">Arquitectura Empresarial — Seguros Bolívar · Junio 2026 · Versión 3.1</div>
+    </header>
+
+    <nav class="nav">
+        <div class="nav-inner">
+            <button class="nav-btn active" onclick="showSection('resumen')">Resumen</button>
+            <button class="nav-btn" onclick="showSection('analistas')">Analistas</button>
+            <button class="nav-btn" onclick="showSection('capacidades')">Capacidades</button>
+            <button class="nav-btn" onclick="showSection('costos')">Costos</button>
+            <button class="nav-btn" onclick="showSection('gobernanza')">Gobernanza</button>
+            <button class="nav-btn" onclick="showSection('inhouse')">In-House</button>
+            <button class="nav-btn" onclick="showSection('capacidades-cms')">Capacidades CMS</button>
+            <button class="nav-btn" onclick="showSection('comparativa')">Comparativa</button>
+            <button class="nav-btn" onclick="showSection('recomendacion')">Decisión Final</button>
+            <button class="nav-btn" onclick="showSection('fuentes')">Fuentes</button>
+        </div>
+    </nav>
+
+    <main class="main">
+
+        <!-- RESUMEN EJECUTIVO -->
+        <div id="resumen" class="section active">
+            <div class="alert alert-warning">
+                <div class="alert-icon">⚠️</div>
+                <div>
+                    <strong>Principio Rector: Cambio Transversal</strong>
+                    <p>Cualquier decisión de reemplazo de WordPress debe aplicarse a TODA la compañía. No es viable mantener WordPress para unas áreas y una solución diferente para otras. Áreas identificadas: Tienda Digital (Ernesto Castillo), Punto Com (Fabio Barbosa), otras por confirmar (Mercadeo, Landing pages).</p>
+                </div>
+            </div>
+            <div class="card">
+                <h2>Contexto</h2>
+                <p>Seguros Bolívar actualmente opera WordPress sobre ECS Fargate en AWS, utilizando los módulos Terraform de la librería interna <code>librerias-cloud-modulos-comunes-infra</code>. Este informe evalúa si WordPress es la plataforma CMS adecuada para la compañía, comparándola con alternativas posicionadas por analistas de referencia como Gartner y Forrester, e incluye la nueva propuesta de desarrollo In-House surgida del equipo de Tienda Digital (TASD-411, mayo 2026).</p>
+            </div>
+            <div class="card">
+                <h2>Plataformas Evaluadas</h2>
+                <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: var(--spacing-md); margin-top: var(--spacing-md);">
+                    <div style="text-align:center; padding: var(--spacing-md); border-radius: var(--radius-md); background: var(--bg-light);"><div style="font-size:1.8rem;">🔧</div><strong>WordPress<br>Self-hosted</strong><div><span class="badge badge-green">Open Source</span></div></div>
+                    <div style="text-align:center; padding: var(--spacing-md); border-radius: var(--radius-md); background: var(--bg-light);"><div style="font-size:1.8rem;">⚡</div><strong>WordPress<br>VIP</strong><div><span class="badge badge-yellow">OS + Licencia</span></div></div>
+                    <div style="text-align:center; padding: var(--spacing-md); border-radius: var(--radius-md); background: var(--bg-light);"><div style="font-size:1.8rem;">🏗️</div><strong>Drupal<br>Self-hosted</strong><div><span class="badge badge-green">Open Source</span></div></div>
+                    <div style="text-align:center; padding: var(--spacing-md); border-radius: var(--radius-md); background: var(--bg-light);"><div style="font-size:1.8rem;">🏢</div><strong>Acquia<br>DXP</strong><div><span class="badge badge-yellow">OS + Licencia</span></div></div>
+                    <div style="text-align:center; padding: var(--spacing-md); border-radius: var(--radius-md); background: var(--bg-light);"><div style="font-size:1.8rem;">☁️</div><strong>Contentstack</strong><div><span class="badge badge-red">SaaS Propietario</span></div></div>
+                    <div style="text-align:center; padding: var(--spacing-md); border-radius: var(--radius-md); background: var(--bg-light);"><div style="font-size:1.8rem;">🚀</div><strong>Optimizely</strong><div><span class="badge badge-red">SaaS Propietario</span></div></div>
+                    <div style="text-align:center; padding: var(--spacing-md); border-radius: var(--radius-md); background: #e3f2fd; border: 2px solid var(--info);"><div style="font-size:1.8rem;">🛠️</div><strong>CMS<br>In-House</strong><div><span class="badge badge-blue">Nueva Propuesta</span></div></div>
+                </div>
+            </div>
+            <div class="card">
+                <h2>Hallazgos Clave</h2>
+                <div class="finding-grid">
+                    <div class="finding-card" style="border-left: 3px solid var(--error); background: #fef5f5;"><strong>WordPress no es líder enterprise</strong><p>No aparece en el Gartner MQ for DXP 2025. WordPress VIP queda como "Strong Performer" en Forrester Wave CMS Q1 2025, por debajo de los líderes.</p></div>
+                    <div class="finding-card" style="border-left: 3px solid var(--success); background: #f0faf5;"><strong>Open-source no es impedimento</strong><p>Acquia (basado en Drupal, 100% open-source) lleva 6 años consecutivos como líder en Gartner MQ for DXP.</p></div>
+                    <div class="finding-card" style="border-left: 3px solid var(--warning); background: #fffdf0;"><strong>Riesgo de gobernanza en WordPress</strong><p>El conflicto Automattic vs WP Engine (2024-2025) expuso que una sola entidad controla WordPress.org, plugins y actualizaciones.</p></div>
+                    <div class="finding-card" style="border-left: 3px solid var(--info); background: #f0f7ff;"><strong>Drupal self-hosted: mejor relación costo/capacidad</strong><p>$0 en licencias, capacidades enterprise nativas, y compatible con la infraestructura ECS actual de la compañía.</p></div>
+                    <div class="finding-card" style="border-left: 3px solid var(--info); background: #f0f7ff;"><strong>In-House: stack aprobado, alcance por evaluar</strong><p>Java+Angular+MongoDB cumple tech stack. PoC demostró textos/imágenes con preview. Capacidades enterprise no demostradas — requieren evaluación.</p></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- POSICIONAMIENTO ANALISTAS -->
+        <div id="analistas" class="section">
+            <div class="card">
+                <h2>Posicionamiento según Analistas de Referencia</h2>
+                <p>Las evaluaciones de Gartner y Forrester son los referentes más reconocidos a nivel global para la selección de tecnología enterprise. A continuación se presenta cómo cada plataforma evaluada se posiciona en los reportes más recientes.</p>
+            </div>
+            <div class="analyst-grid">
+                <div class="analyst-card"><h4>Gartner Magic Quadrant for DXP 2025</h4><p style="font-size:0.9rem; margin-bottom: var(--spacing-md);">Evalúa 16 vendors en plataformas de experiencia digital. Los líderes son plataformas con capacidades completas de gestión de contenido, datos de cliente, y entrega de experiencias.</p><div style="margin-bottom: var(--spacing-sm);"><span class="badge badge-green">Líder</span> Optimizely, Adobe, Acquia (Drupal)</div><div style="margin-bottom: var(--spacing-sm);"><span class="badge badge-blue">Visionario</span> Sitecore, Contentstack, Magnolia, Uniform</div><div style="margin-bottom: var(--spacing-sm);"><span class="badge badge-yellow">Challenger</span> OpenText, HCL Software</div><div style="margin-bottom: var(--spacing-sm);"><span class="badge badge-red">No incluido</span> WordPress / WordPress VIP</div><div class="source">Fuente: <a href="https://www.cxtoday.com/contact-center/gartner-magic-quadrant-for-digital-experience-platforms-2025-the-rundown/" target="_blank">CX Today — Gartner MQ DXP 2025 Rundown</a> · Feb 2025</div></div>
+                <div class="analyst-card"><h4>Forrester Wave: CMS, Q1 2025</h4><p style="font-size:0.9rem; margin-bottom: var(--spacing-md);">Evalúa los 13 vendors CMS más significativos del mercado, basándose en criterios de oferta actual, estrategia y presencia de mercado.</p><div style="margin-bottom: var(--spacing-sm);"><span class="badge badge-green">Líder</span> Optimizely, Adobe, Contentstack</div><div style="margin-bottom: var(--spacing-sm);"><span class="badge badge-blue">Strong Performer</span> WordPress VIP, Sitecore, Acquia, Contentful, Magnolia</div><div class="source">Fuente: <a href="https://wpvip.com/blog/forrester-wave-content-management-system/" target="_blank">WordPress VIP — Forrester Wave CMS</a> · Jun 2025</div></div>
+                <div class="analyst-card"><h4>Forrester Wave: DXP, Q4 2025</h4><p style="font-size:0.9rem; margin-bottom: var(--spacing-md);">Evaluación enfocada en plataformas de experiencia digital completas, con énfasis en composabilidad, AI y orquestación de experiencias.</p><div style="margin-bottom: var(--spacing-sm);"><span class="badge badge-green">Líder</span> Adobe, Optimizely, Salesforce, Sitecore</div><div style="margin-bottom: var(--spacing-sm);"><span class="badge badge-blue">Strong Performer</span> Contentstack, Acquia</div><div style="margin-bottom: var(--spacing-sm);"><span class="badge badge-red">No incluido</span> WordPress / WordPress VIP</div><div class="source">Fuente: <a href="https://cmsmag.net/liferay/forrester-wave-q4-2025/" target="_blank">CMS Mag — Forrester Wave DXP Q4 2025</a> · Ene 2026</div></div>
+                <div class="analyst-card"><h4>Acquia: 6 años como Líder Gartner</h4><p style="font-size:0.9rem; margin-bottom: var(--spacing-md);">Acquia, construido sobre Drupal (open-source GPL), ha sido nombrado líder en el Gartner MQ for DXP durante 6 años consecutivos (2020-2025), demostrando que el modelo open-source no es impedimento para alcanzar el nivel enterprise más alto.</p><div class="source">Fuente: <a href="https://www.acquia.com/resources/report/acquia-named-leader-2024-gartner-magic-quadranttm-dxp" target="_blank">Acquia — Leader Gartner MQ DXP 2025</a></div></div>
+                <div class="analyst-card"><h4>WordPress VIP: Solo 5.7% Enterprise</h4><p style="font-size:0.9rem; margin-bottom: var(--spacing-md);">Según análisis de mercado, solo el 5.7% de los usuarios de WordPress VIP son organizaciones enterprise (1000+ empleados), comparado con 55% para Sitecore y 45% para Adobe AEM. Esto refleja que WordPress VIP es principalmente una plataforma mid-market.</p><div class="source">Fuente: <a href="https://www.webstacks.com/blog/wordpress-b2b-enterprise-assessment-2026" target="_blank">Webstacks — WordPress B2B Enterprise Assessment 2026</a></div></div>
+                <div class="analyst-card"><h4>Gartner: 70% composable para 2026</h4><p style="font-size:0.9rem; margin-bottom: var(--spacing-md);">Gartner proyecta que para 2026, al menos el 70% de las organizaciones adoptarán tecnología DXP composable en lugar de suites monolíticas. WordPress es un CMS monolítico por naturaleza, lo que lo posiciona en contra de esta tendencia.</p><div class="source">Fuente: <a href="https://cmscritic.com/some-thoughts-on-the-gartner-digital-experience-platforms-dxp-magic-quadrant-for-2025" target="_blank">CMS Critic — Gartner DXP MQ 2025 Analysis</a> · May 2025</div></div>
+            </div>
+        </div>
+
+        <!-- MATRIZ DE CAPACIDADES -->
+        <div id="capacidades" class="section">
+            <div class="card">
+                <h2>Matriz Comparativa de Capacidades</h2>
+                <p>Haga clic en el nombre de cada capacidad para ver su descripción detallada. La evaluación se basa en las funcionalidades nativas de cada plataforma, sin considerar plugins o integraciones de terceros. La columna In-House refleja lo demostrado en la PoC de mayo 2026.</p>
+            </div>
+            <div class="filter-bar">
+                <button class="chip active" onclick="filterCaps('all', this)">Todas</button>
+                <button class="chip" onclick="filterCaps('contenido', this)">Gestión de Contenido</button>
+                <button class="chip" onclick="filterCaps('experiencia', this)">Experiencia Digital</button>
+                <button class="chip" onclick="filterCaps('seguridad', this)">Seguridad y Compliance</button>
+                <button class="chip" onclick="filterCaps('tecnico', this)">Técnico</button>
+                <button class="chip" onclick="filterCaps('operativo', this)">Operativo</button>
+            </div>
+            <div class="table-wrapper">
+                <table id="capTable">
+                    <thead>
+                        <tr>
+                            <th>Capacidad</th>
+                            <th>WP Self-hosted</th>
+                            <th>WP VIP</th>
+                            <th>Drupal Self-hosted</th>
+                            <th>Acquia DXP</th>
+                            <th>Contentstack</th>
+                            <th>Optimizely</th>
+                            <th style="background:#0277bd;">In-House</th>
+                        </tr>
+                    </thead>
+                    <tbody id="capBody"></tbody>
+                </table>
+            </div>
+            <div class="card" style="background: #f0faf5; border-color: var(--primary-light);">
+                <h3>Leyenda</h3>
+                <div style="display: flex; gap: var(--spacing-xl); flex-wrap: wrap; margin-top: var(--spacing-sm);">
+                    <div style="display:flex; align-items:center; gap:var(--spacing-sm);"><span class="rating"><span class="dot filled"></span><span class="dot filled"></span><span class="dot filled"></span></span><span style="font-size:0.85rem;">Excelente — Capacidad nativa, madura y diferenciadora</span></div>
+                    <div style="display:flex; align-items:center; gap:var(--spacing-sm);"><span class="rating"><span class="dot filled"></span><span class="dot filled"></span><span class="dot empty"></span></span><span style="font-size:0.85rem;">Bueno — Capacidad presente, funcional pero no líder</span></div>
+                    <div style="display:flex; align-items:center; gap:var(--spacing-sm);"><span class="rating"><span class="dot filled"></span><span class="dot empty"></span><span class="dot empty"></span></span><span style="font-size:0.85rem;">Básico — Capacidad limitada o requiere plugins</span></div>
+                    <div style="display:flex; align-items:center; gap:var(--spacing-sm);"><span class="rating"><span class="dot na"></span><span class="dot na"></span><span class="dot na"></span></span><span style="font-size:0.85rem;">No demostrado — Requiere evaluación (solo In-House)</span></div>
+                </div>
+            </div>
+            <div class="alert alert-info">
+                <div class="alert-icon">ℹ️</div>
+                <div><strong>Nota sobre la columna In-House</strong><p>Las capacidades marcadas como "no demostrado" no fueron demostradas ni descartadas en la PoC. Es una PoC que podría escalarse — el esfuerzo y viabilidad de cada capacidad requieren evaluación formal.</p></div>
+            </div>
+        </div>
+
+        <!-- MODELO DE COSTOS (complete from original + In-House) -->
+        <div id="costos" class="section">
+            <div class="card">
+                <h2>Modelo de Costos Comparativo</h2>
+                <p>Estimación de costos anuales para un sitio enterprise con tráfico moderado (~500K visitas/mes). Los costos de infraestructura asumen despliegue sobre ECS Fargate con RDS y EFS, utilizando los módulos Terraform existentes de la compañía. Los precios de licenciamiento son estimaciones basadas en información pública disponible y pueden variar según negociación.</p>
+            </div>
+            <div class="cost-grid">
+                <div class="cost-card">
+                    <div class="cost-card-header" style="background: linear-gradient(135deg, #455a64, #607d8b);"><h3>WordPress Self-hosted</h3><div class="price">~$3K - $5K</div><div class="price-sub">USD / año (solo infraestructura)</div></div>
+                    <div class="cost-card-body"><ul>
+                        <li><span>Licencia CMS</span><span style="color:var(--success);">$0 (GPL)</span></li>
+                        <li><span>Licencia plataforma</span><span style="color:var(--success);">$0</span></li>
+                        <li><span>ECS Fargate (2 tasks)</span><span>~$1,008/año</span></li>
+                        <li><span>RDS db.t3.medium</span><span>~$720/año</span></li>
+                        <li><span>EFS + ALB</span><span>~$500/año</span></li>
+                        <li><span>S3 + CloudFront</span><span>~$60/año</span></li>
+                        <li><span>Soporte vendor</span><span style="color:var(--error);">No incluido</span></li>
+                        <li><span>Compliance</span><span style="color:var(--error);">Por su cuenta</span></li>
+                    </ul><div style="margin-top:var(--spacing-md); padding-top:var(--spacing-md); border-top:2px solid var(--border-color);"><strong>Costo oculto principal:</strong><p style="font-size:0.8rem; color:var(--text-secondary); margin-top:4px;">Equipo DevOps/SRE para seguridad, parches, backups, monitoreo. Vulnerabilidades en plugins. Sin SLA de soporte.</p></div></div>
+                </div>
+                <div class="cost-card">
+                    <div class="cost-card-header" style="background: linear-gradient(135deg, #1565c0, #42a5f5);"><h3>WordPress VIP</h3><div class="price">~$25K - $100K+</div><div class="price-sub">USD / año (licencia + infra incluida)</div></div>
+                    <div class="cost-card-body"><ul>
+                        <li><span>Licencia CMS</span><span style="color:var(--success);">$0 (GPL)</span></li>
+                        <li><span>Suscripción plataforma</span><span>$25K - $100K+/año</span></li>
+                        <li><span>Infraestructura</span><span style="color:var(--success);">Incluida</span></li>
+                        <li><span>CDN</span><span style="color:var(--success);">Incluido</span></li>
+                        <li><span>Soporte SLA 99.95%</span><span style="color:var(--success);">Incluido</span></li>
+                        <li><span>Compliance (FedRAMP)</span><span style="color:var(--success);">Incluido</span></li>
+                        <li><span>Analytics (Parse.ly)</span><span style="color:var(--success);">Incluido</span></li>
+                        <li><span>Contratos</span><span>Anuales</span></li>
+                    </ul><div style="margin-top:var(--spacing-md); padding-top:var(--spacing-md); border-top:2px solid var(--border-color);"><strong>Costo oculto principal:</strong><p style="font-size:0.8rem; color:var(--text-secondary); margin-top:4px;">Precio basado en Monthly Unique Visitors (MUV). Desarrollo custom requiere agencia o equipo interno. Limitado en personalización avanzada.</p></div></div>
+                </div>
+                <div class="cost-card" style="border: 2px solid var(--primary-base);">
+                    <div class="cost-card-header" style="background: linear-gradient(135deg, var(--primary-dark), var(--primary-base));"><h3>Drupal Self-hosted ⭐</h3><div class="price">~$3K - $5K</div><div class="price-sub">USD / año (solo infraestructura)</div></div>
+                    <div class="cost-card-body"><ul>
+                        <li><span>Licencia CMS</span><span style="color:var(--success);">$0 (GPL)</span></li>
+                        <li><span>Licencia plataforma</span><span style="color:var(--success);">$0</span></li>
+                        <li><span>ECS Fargate (2 tasks)</span><span>~$1,008/año</span></li>
+                        <li><span>RDS db.t3.medium</span><span>~$720/año</span></li>
+                        <li><span>EFS + ALB</span><span>~$500/año</span></li>
+                        <li><span>S3 + CloudFront</span><span>~$60/año</span></li>
+                        <li><span>Soporte vendor</span><span style="color:var(--error);">No incluido</span></li>
+                        <li><span>Compliance</span><span style="color:var(--error);">Por su cuenta</span></li>
+                    </ul><div style="margin-top:var(--spacing-md); padding-top:var(--spacing-md); border-top:2px solid var(--primary-light);"><strong>Ventaja clave:</strong><p style="font-size:0.8rem; color:var(--text-secondary); margin-top:4px;">Mismo costo de infra que WordPress, pero con capacidades enterprise nativas (workflows, permisos granulares, API-first, i18n). Compatible con módulos Terraform ECS existentes. Migración a Acquia DXP posible sin reescribir.</p></div></div>
+                </div>
+                <div class="cost-card">
+                    <div class="cost-card-header" style="background: linear-gradient(135deg, #4a148c, #7b1fa2);"><h3>Acquia DXP</h3><div class="price">~$40K - $200K+</div><div class="price-sub">USD / año (licencia + infra incluida)</div></div>
+                    <div class="cost-card-body"><ul>
+                        <li><span>Licencia CMS (Drupal)</span><span style="color:var(--success);">$0 (GPL)</span></li>
+                        <li><span>Suscripción Acquia Cloud</span><span>$40K - $200K+/año</span></li>
+                        <li><span>Infraestructura</span><span style="color:var(--success);">Incluida (AWS)</span></li>
+                        <li><span>CDN</span><span style="color:var(--success);">Incluido</span></li>
+                        <li><span>Soporte SLA 99.95%</span><span style="color:var(--success);">Incluido</span></li>
+                        <li><span>Compliance (FedRAMP, SOC, ISO, HIPAA)</span><span style="color:var(--success);">Incluido</span></li>
+                        <li><span>CDP + Personalización</span><span>Según tier</span></li>
+                        <li><span>Implementación</span><span>$20K - $100K</span></li>
+                    </ul><div style="margin-top:var(--spacing-md); padding-top:var(--spacing-md); border-top:2px solid var(--border-color);"><strong>Costo oculto principal:</strong><p style="font-size:0.8rem; color:var(--text-secondary); margin-top:4px;">Implementación inicial costosa. Tiers superiores necesarios para CDP y personalización avanzada. Pero incluye compliance certificado desde el día 1.</p></div></div>
+                </div>
+                <div class="cost-card">
+                    <div class="cost-card-header" style="background: linear-gradient(135deg, #e65100, #ff9800);"><h3>Contentstack</h3><div class="price">~$50K - $150K+</div><div class="price-sub">USD / año (licencia SaaS)</div></div>
+                    <div class="cost-card-body"><ul>
+                        <li><span>Licencia CMS</span><span style="color:var(--error);">Propietario</span></li>
+                        <li><span>Suscripción plataforma</span><span>$50K - $150K+/año</span></li>
+                        <li><span>Infraestructura backend</span><span style="color:var(--success);">Incluida (SaaS)</span></li>
+                        <li><span>Hosting frontend</span><span style="color:var(--error);">Aparte (Vercel/Netlify)</span></li>
+                        <li><span>Soporte SLA</span><span style="color:var(--success);">Incluido</span></li>
+                        <li><span>CDP</span><span>Módulo adicional</span></li>
+                        <li><span>Implementación</span><span>$50K - $150K</span></li>
+                        <li><span>Cobro desde firma</span><span style="color:var(--warning);">Sí, no desde go-live</span></li>
+                    </ul><div style="margin-top:var(--spacing-md); padding-top:var(--spacing-md); border-top:2px solid var(--border-color);"><strong>Costo oculto principal:</strong><p style="font-size:0.8rem; color:var(--text-secondary); margin-top:4px;">Frontend hosting aparte (~$200-500/mes). Cobro basado en API calls, stacks, usuarios y ambientes. Costos comienzan al firmar contrato, no al lanzar.</p></div></div>
+                </div>
+                <div class="cost-card">
+                    <div class="cost-card-header" style="background: linear-gradient(135deg, #1a237e, #3f51b5);"><h3>Optimizely</h3><div class="price">~$36K - $200K+</div><div class="price-sub">USD / año (licencia SaaS)</div></div>
+                    <div class="cost-card-body"><ul>
+                        <li><span>Licencia CMS</span><span style="color:var(--error);">Propietario</span></li>
+                        <li><span>Suscripción plataforma</span><span>$36K - $200K+/año</span></li>
+                        <li><span>Infraestructura</span><span style="color:var(--success);">Incluida (SaaS)</span></li>
+                        <li><span>CDN + Hosting</span><span style="color:var(--success);">Incluido</span></li>
+                        <li><span>Soporte SLA</span><span style="color:var(--success);">Incluido</span></li>
+                        <li><span>Experimentación A/B</span><span style="color:var(--success);">Incluido</span></li>
+                        <li><span>Personalización</span><span style="color:var(--success);">Incluido</span></li>
+                        <li><span>Implementación</span><span>$50K - $200K</span></li>
+                    </ul><div style="margin-top:var(--spacing-md); padding-top:var(--spacing-md); border-top:2px solid var(--border-color);"><strong>Costo oculto principal:</strong><p style="font-size:0.8rem; color:var(--text-secondary); margin-top:4px;">Solo contratos anuales. Precio escala con impressions/traffic. Implementación compleja requiere partner certificado. Talento Optimizely escaso en LATAM.</p></div></div>
+                </div>
+                <div class="cost-card" style="border: 2px solid var(--info);">
+                    <div class="cost-card-header" style="background: linear-gradient(135deg, #0277bd, #0288d1);"><h3>CMS In-House 🛠️</h3><div class="price">~$4K</div><div class="price-sub">USD / año (solo infraestructura — reutiliza Mongo)</div></div>
+                    <div class="cost-card-body"><ul>
+                        <li><span>Licencia CMS</span><span style="color:var(--success);">$0 (propio)</span></li>
+                        <li><span>ECS Fargate (2 tasks 0.5vCPU/1GB)</span><span>~$2,400/año</span></li>
+                        <li><span>MongoDB</span><span style="color:var(--success);">$0 (cluster existente Tienda)</span></li>
+                        <li><span>ALB (1 balanceador)</span><span>~$792/año</span></li>
+                        <li><span>S3 + CloudFront</span><span>~$720/año</span></li>
+                        <li><span>WAF</span><span>~$240/año</span></li>
+                        <li><span>Desarrollo inicial</span><span style="color:var(--warning);">POR ESTIMAR</span></li>
+                        <li><span>Mantenimiento anual</span><span style="color:var(--warning);">POR ESTIMAR</span></li>
+                    </ul><div style="margin-top:var(--spacing-md); padding-top:var(--spacing-md); border-top:2px solid var(--info);"><strong>Origen de los costos:</strong><p style="font-size:0.8rem; color:var(--text-secondary); margin-top:4px;">ECS: 2 tasks Fargate 0.5vCPU/1GB (pricing AWS estándar). MongoDB: $0 porque reutiliza cluster existente de Tienda Digital (dato reunión TASD-411). ALB: costo estándar de 1 Application Load Balancer. S3+CloudFront: mismo que las otras opciones. Costos de desarrollo y mantenimiento NO estimados — requiere caso de negocio formal.</p></div></div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>Resumen: ¿Puedo seguir open-source pagando solo infraestructura?</h3>
+                <div class="table-wrapper" style="margin-top: var(--spacing-md);">
+                    <table>
+                        <thead><tr><th>Plataforma</th><th>Licencia CMS</th><th>Costo plataforma/año</th><th>¿Solo pago infra?</th><th>Ruta de escalamiento</th></tr></thead>
+                        <tbody>
+                            <tr><td>WordPress Self-hosted</td><td><span class="badge badge-green">GPL — $0</span></td><td>$0</td><td><span class="badge badge-green">Sí</span></td><td>→ WordPress VIP ($25K+/año)</td></tr>
+                            <tr><td>Drupal Self-hosted</td><td><span class="badge badge-green">GPL — $0</span></td><td>$0</td><td><span class="badge badge-green">Sí</span></td><td>→ Acquia DXP ($40K+/año)</td></tr>
+                            <tr><td>CMS In-House</td><td><span class="badge badge-green">Propio — $0</span></td><td>$0 (+ desarrollo POR ESTIMAR)</td><td><span class="badge badge-green">Sí</span></td><td>→ Escalamiento interno (sin roadmap externo)</td></tr>
+                            <tr><td>WordPress VIP</td><td><span class="badge badge-green">GPL — $0</span></td><td>$25K - $100K+</td><td><span class="badge badge-yellow">No</span></td><td>Tiers Standard → Enhanced → Signature</td></tr>
+                            <tr><td>Acquia DXP</td><td><span class="badge badge-green">GPL — $0</span></td><td>$40K - $200K+</td><td><span class="badge badge-yellow">No</span></td><td>Tiers Activate → Core → Enterprise</td></tr>
+                            <tr><td>Contentstack</td><td><span class="badge badge-red">Propietario</span></td><td>$50K - $150K+</td><td><span class="badge badge-red">No</span></td><td>CMS → CDP → DXP (módulos)</td></tr>
+                            <tr><td>Optimizely</td><td><span class="badge badge-red">Propietario</span></td><td>$36K - $200K+</td><td><span class="badge badge-red">No</span></td><td>CMS → DXP composable</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- GOBERNANZA Y RIESGOS (complete from original + In-House column) -->
+        <div id="gobernanza" class="section">
+            <div class="card">
+                <h2>Gobernanza y Riesgos</h2>
+                <p>La gobernanza del proyecto open-source es un factor crítico para decisiones enterprise a largo plazo. Determina quién controla las actualizaciones, la seguridad, y la dirección del proyecto.</p>
+            </div>
+            <div class="alert alert-warning">
+                <div class="alert-icon">⚠️</div>
+                <div><strong>Riesgo crítico: Gobernanza de WordPress</strong><p>En septiembre 2024, Matt Mullenweg (CEO de Automattic y co-creador de WordPress) inició un conflicto público con WP Engine, exigiendo el 8% de sus ingresos por uso de la marca WordPress. Automattic bloqueó el acceso de WP Engine a recursos de WordPress.org, afectando actualizaciones de plugins y temas para millones de sitios. Esto expuso que una sola persona/entidad tiene control efectivo sobre el ecosistema WordPress.org, incluyendo el directorio de plugins, actualizaciones de seguridad, y la marca.</p><p style="margin-top:8px;"><strong>Fuentes:</strong> <a href="https://www.brightspot.com/cms-resources/digital-trends/wordpress-dispute-impact-on-enterprise-content-management" target="_blank" style="color:var(--primary-base);">Brightspot — WordPress Dispute Impact</a> · <a href="https://ingenious.org/news/article:wordpress-at-a-crossroads-community-fractures-and-uncertain-futures/" target="_blank" style="color:var(--primary-base);">Ingenious — WordPress at a Crossroads</a></p></div>
+            </div>
+            <div class="alert alert-info">
+                <div class="alert-icon">ℹ️</div>
+                <div><strong>Contraste: Gobernanza de Drupal</strong><p>Drupal es gobernado por la Drupal Association, una organización sin ánimo de lucro con gobernanza distribuida. Aunque Dries Buytaert (creador de Drupal y CTO de Acquia) tiene influencia significativa, la estructura de gobernanza es más transparente y no depende de una sola entidad comercial. El código, los módulos contribuidos, y la infraestructura del proyecto están separados de cualquier empresa individual.</p></div>
+            </div>
+            <div class="table-wrapper">
+                <table>
+                    <thead><tr><th>Factor de Riesgo</th><th>WP Self-hosted</th><th>WP VIP</th><th>Drupal Self-hosted</th><th>Acquia DXP</th><th>Contentstack</th><th>Optimizely</th><th style="background:#0277bd;">In-House</th></tr></thead>
+                    <tbody>
+                        <tr><td style="font-weight:500;">Gobernanza del proyecto</td><td><span class="badge badge-red">Centralizada</span></td><td><span class="badge badge-red">Centralizada</span></td><td><span class="badge badge-green">Distribuida</span></td><td><span class="badge badge-green">Distribuida</span></td><td><span class="badge badge-yellow">Vendor único</span></td><td><span class="badge badge-yellow">Vendor único</span></td><td><span class="badge badge-green">Interna (control total)</span></td></tr>
+                        <tr><td style="font-weight:500;">Vendor lock-in</td><td><span class="badge badge-green">Bajo</span></td><td><span class="badge badge-yellow">Medio</span></td><td><span class="badge badge-green">Bajo</span></td><td><span class="badge badge-yellow">Medio</span></td><td><span class="badge badge-red">Alto</span></td><td><span class="badge badge-red">Alto</span></td><td><span class="badge badge-green">Ninguno</span></td></tr>
+                        <tr><td style="font-weight:500;">Riesgo de seguridad (plugins)</td><td><span class="badge badge-red">Alto</span></td><td><span class="badge badge-yellow">Medio</span></td><td><span class="badge badge-yellow">Medio</span></td><td><span class="badge badge-green">Bajo</span></td><td><span class="badge badge-green">Bajo</span></td><td><span class="badge badge-green">Bajo</span></td><td><span class="badge badge-gray">Por evaluar</span></td></tr>
+                        <tr><td style="font-weight:500;">Portabilidad del contenido</td><td><span class="badge badge-yellow">Media</span></td><td><span class="badge badge-yellow">Media</span></td><td><span class="badge badge-green">Alta</span></td><td><span class="badge badge-green">Alta</span></td><td><span class="badge badge-green">Alta (API)</span></td><td><span class="badge badge-yellow">Media</span></td><td><span class="badge badge-gray">Por evaluar</span></td></tr>
+                        <tr><td style="font-weight:500;">Continuidad si vendor desaparece</td><td><span class="badge badge-green">Código propio</span></td><td><span class="badge badge-yellow">Migrar infra</span></td><td><span class="badge badge-green">Código propio</span></td><td><span class="badge badge-green">Migrar a self-hosted</span></td><td><span class="badge badge-red">Reescribir</span></td><td><span class="badge badge-red">Reescribir</span></td><td><span class="badge badge-green">Código propio</span></td></tr>
+                        <tr><td style="font-weight:500;">Superficie de ataque</td><td><span class="badge badge-red">Alta (60K+ plugins)</span></td><td><span class="badge badge-yellow">Media (curado)</span></td><td><span class="badge badge-yellow">Media</span></td><td><span class="badge badge-green">Baja (managed)</span></td><td><span class="badge badge-green">Baja (SaaS)</span></td><td><span class="badge badge-green">Baja (SaaS)</span></td><td><span class="badge badge-gray">Por evaluar</span></td></tr>
+                        <tr><td style="font-weight:500;">Bus factor</td><td><span class="badge badge-green">Bajo</span></td><td><span class="badge badge-green">Bajo</span></td><td><span class="badge badge-green">Bajo</span></td><td><span class="badge badge-green">Bajo</span></td><td><span class="badge badge-green">Bajo</span></td><td><span class="badge badge-green">Bajo</span></td><td><span class="badge badge-red">A evaluar</span></td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- OPCIÓN IN-HOUSE -->
+        <div id="inhouse" class="section">
+            <div class="card">
+                <h2>Opción D: CMS In-House — Análisis Detallado</h2>
+                <p>En reunión del 12 de mayo de 2026 (TASD-411), Ernesto Castillo Ramírez presentó un prototipo funcional de CMS custom desarrollado para la Tienda Digital. La propuesta surge porque WordPress resulta poco amigable para el equipo, los cambios no son evidentes, y Germán Sánchez (VP Tecnología) ha expresado descontento con la dependencia de WordPress.</p>
+            </div>
+            <div class="card">
+                <h3>Stack Tecnológico</h3>
+                <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: var(--spacing-md); margin-top: var(--spacing-md);">
+                    <div style="text-align:center; padding: var(--spacing-md); border-radius: var(--radius-md); background: #f0faf5; border: 1px solid var(--primary-light);"><div style="font-size:1.5rem;">☕</div><strong>Java Spring Boot</strong><div style="font-size:0.8rem; color:var(--text-secondary);">Backend / Content Service</div><div><span class="badge badge-green">Stack aprobado</span></div></div>
+                    <div style="text-align:center; padding: var(--spacing-md); border-radius: var(--radius-md); background: #f0faf5; border: 1px solid var(--primary-light);"><div style="font-size:1.5rem;">🅰️</div><strong>Angular + PrimeNG</strong><div style="font-size:0.8rem; color:var(--text-secondary);">Frontend Admin</div><div><span class="badge badge-green">Stack aprobado</span></div></div>
+                    <div style="text-align:center; padding: var(--spacing-md); border-radius: var(--radius-md); background: #f0faf5; border: 1px solid var(--primary-light);"><div style="font-size:1.5rem;">🍃</div><strong>MongoDB</strong><div style="font-size:0.8rem; color:var(--text-secondary);">Base de datos (existente)</div><div><span class="badge badge-green">Stack aprobado</span></div></div>
+                </div>
+            </div>
+            <div class="card">
+                <h3>Alcance Demostrado vs Requerido</h3>
+                <div class="table-wrapper" style="box-shadow:none;">
+                    <table>
+                        <thead><tr><th>Capacidad</th><th>Tienda Digital (PoC)</th><th>Punto Com (requerido)</th><th>Estado</th></tr></thead>
+                        <tbody>
+                            <tr><td>Textos e imágenes</td><td>✅ Demostrado</td><td>✅</td><td><span class="badge badge-green">Cubierto</span></td></tr>
+                            <tr><td>Preview en tiempo real</td><td>✅ Demostrado</td><td>✅</td><td><span class="badge badge-green">Cubierto</span></td></tr>
+                            <tr><td>Historial de versiones</td><td>✅ Demostrado</td><td>✅</td><td><span class="badge badge-green">Cubierto</span></td></tr>
+                            <tr><td>Módulos dinámicos (orden, visibilidad)</td><td>No demostrado</td><td>✅</td><td><span class="badge badge-yellow">POR EVALUAR</span></td></tr>
+                            <tr><td>Workflows de aprobación</td><td>No demostrado</td><td>✅</td><td><span class="badge badge-yellow">POR EVALUAR</span></td></tr>
+                            <tr><td>Roles/permisos granulares</td><td>No demostrado</td><td>✅</td><td><span class="badge badge-yellow">POR EVALUAR</span></td></tr>
+                            <tr><td>Promoción entre ambientes</td><td>No demostrado</td><td>✅</td><td><span class="badge badge-yellow">POR EVALUAR</span></td></tr>
+                            <tr><td>SEO management</td><td>No demostrado</td><td>✅</td><td><span class="badge badge-yellow">POR EVALUAR</span></td></tr>
+                            <tr><td>Media library avanzada</td><td>No demostrado</td><td>✅</td><td><span class="badge badge-yellow">POR EVALUAR</span></td></tr>
+                            <tr><td>API headless (consumo externo)</td><td>No demostrado</td><td>✅</td><td><span class="badge badge-yellow">POR EVALUAR</span></td></tr>
+                            <tr><td>Internacionalización</td><td>No demostrado</td><td>🟡 Deseable</td><td><span class="badge badge-yellow">POR EVALUAR</span></td></tr>
+                            <tr><td>Búsqueda de contenidos</td><td>No demostrado</td><td>✅</td><td><span class="badge badge-yellow">POR EVALUAR</span></td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="alert alert-warning" style="margin-top:var(--spacing-md);"><div class="alert-icon">📋</div><div><strong>Conclusión sobre el alcance</strong><p>La PoC demostró gestión de textos/imágenes, preview en tiempo real e historial de versiones. Las demás capacidades necesarias para cubrir toda la compañía <strong>no fueron demostradas ni descartadas</strong> — es una PoC que podría escalarse, pero el esfuerzo y viabilidad requieren evaluación formal.</p></div></div>
+            </div>
+            <div class="card">
+                <h3>Riesgos a Evaluar</h3>
+                <div class="finding-grid">
+                    <div class="finding-card" style="border-left: 3px solid var(--error); background: #fef5f5;"><strong>🔴 Bus Factor — A evaluar</strong><p>Si el equipo clave rota, ¿quién mantiene el CMS? No hay comunidad externa. Mitigación: Documentación + pair programming + knowledge transfer.</p></div>
+                    <div class="finding-card" style="border-left: 3px solid var(--error); background: #fef5f5;"><strong>🔴 Alcance transversal — A evaluar</strong><p>La PoC cubre Tienda; viabilidad para Punto Com y otros activos no demostrada. Mitigación: POC extendido como siguiente paso.</p></div>
+                    <div class="finding-card" style="border-left: 3px solid var(--warning); background: #fffdf0;"><strong>🟠 Promoción entre ambientes — A evaluar</strong><p>No hay mecanismo definido para DEV→STG→PRE→PROD. Mitigación: Definir antes de ir a producción.</p></div>
+                    <div class="finding-card" style="border-left: 3px solid var(--warning); background: #fffdf0;"><strong>🟠 Fragmentación — A evaluar</strong><p>Si solo cubre Tienda, WordPress sigue para Punto Com = 2 sistemas. Mitigación: Exigir alcance transversal antes de aprobar.</p></div>
+                </div>
+            </div>
+            <div class="card">
+                <h3>Ventajas</h3>
+                <div class="finding-grid">
+                    <div class="finding-card" style="border-left: 3px solid var(--success); background: #f0faf5;"><strong>✅ Stack 100% aprobado</strong><p>Java + Angular + MongoDB. Sin excepciones al tech stack institucional.</p></div>
+                    <div class="finding-card" style="border-left: 3px solid var(--success); background: #f0faf5;"><strong>✅ Costo infra mínimo</strong><p>Reutiliza MongoDB existente. ~USD 346/mes total.</p></div>
+                    <div class="finding-card" style="border-left: 3px solid var(--success); background: #f0faf5;"><strong>✅ Control total</strong><p>Sin vendor, sin gobernanza externa, sin riesgo de lock-in.</p></div>
+                    <div class="finding-card" style="border-left: 3px solid var(--success); background: #f0faf5;"><strong>✅ UX optimizada</strong><p>Preview en tiempo real. Resuelve la queja principal sobre WordPress.</p></div>
+                </div>
+            </div>
+            <div class="card">
+                <h3>Preguntas Sin Resolver (Reunión TASD-411)</h3>
+                <ol style="padding-left: var(--spacing-lg); color: var(--text-secondary);">
+                    <li style="margin-bottom:var(--spacing-sm);"><strong>¿Cómo se promueven cambios entre ambientes (DEV→STG→PRE→PROD)?</strong> — No hay mecanismo definido</li>
+                    <li style="margin-bottom:var(--spacing-sm);"><strong>¿Qué pasa si MongoDB cae? ¿Cuál es el plan de resiliencia?</strong> — No definido</li>
+                    <li style="margin-bottom:var(--spacing-sm);"><strong>¿Puede cubrir las plantillas complejas de Punto Com?</strong> — No demostrado</li>
+                    <li style="margin-bottom:var(--spacing-sm);"><strong>¿Cuál es el esfuerzo real para extenderlo a otros activos?</strong> — No estimado formalmente</li>
+                    <li style="margin-bottom:var(--spacing-sm);"><strong>¿Quién mantiene el sistema si el equipo actual rota?</strong> — No hay plan de continuidad</li>
+                    <li style="margin-bottom:var(--spacing-sm);"><strong>¿Cómo se maneja el versionamiento de contenidos entre ambientes?</strong> — No definido</li>
+                </ol>
+            </div>
+        </div>
+
+        <!-- CAPACIDADES CMS — ACTUALES, OBLIGATORIAS Y DESEABLES -->
+        <div id="capacidades-cms" class="section">
+            <div class="card">
+                <h2>Capacidades CMS — Actuales, Obligatorias y Deseables</h2>
+                <p>Identificación de las capacidades que el nuevo CMS In-House debe cubrir, basado en lo que hoy se usa con WordPress y en el benchmark de CMS de industria (Drupal, Liferay, Contentful, Strapi, Sanity, Directus).</p>
+                <div style="display:flex; gap:var(--spacing-md); flex-wrap:wrap; margin-top:var(--spacing-md);">
+                    <span class="badge badge-green">✅ Actual — Lo que tenemos hoy</span>
+                    <span class="badge badge-yellow">🎯 Obligatoria — Sin esto no se reemplaza WP</span>
+                    <span class="badge badge-blue">🟡 Deseable — Benchmark de industria</span>
+                    <span style="background:#f3e5f5; color:#6a1b9a; display:inline-block; padding:2px 10px; border-radius:9999px; font-size:0.75rem; font-weight:500;">⭐ Diferenciadora</span>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>Capacidades Actuales (Lo que HOY cubrimos con WordPress)</h3>
+                <div class="table-wrapper" style="box-shadow:none;">
+                    <table>
+                        <thead><tr><th>#</th><th>Capacidad</th><th>Dónde se usa</th><th>Herramienta actual</th></tr></thead>
+                        <tbody>
+                            <tr><td>1</td><td>Edición de textos (copys)</td><td>Tienda, .com, Blog</td><td>WordPress editor</td></tr>
+                            <tr><td>2</td><td>Gestión de imágenes y media</td><td>Todos</td><td>WordPress Media Library</td></tr>
+                            <tr><td>3</td><td>Publicación de artículos/blog</td><td>Blog (~900 contenidos)</td><td>WordPress Posts + Gutenberg</td></tr>
+                            <tr><td>4</td><td>SEO (meta tags, sitemaps, schema)</td><td>Blog, .com</td><td>Plugin Yoast SEO</td></tr>
+                            <tr><td>5</td><td>Carga masiva de contenido</td><td>Blog</td><td>Plugin específico</td></tr>
+                            <tr><td>6</td><td>Autopauta / programación</td><td>Blog</td><td>Plugin específico</td></tr>
+                            <tr><td>7</td><td>Categorías y taxonomías</td><td>Blog, .com</td><td>WordPress Categories/Tags</td></tr>
+                            <tr><td>8</td><td>Landing pages</td><td>.com, Mercadeo</td><td>WordPress Pages</td></tr>
+                            <tr><td>9</td><td>Múltiples ambientes</td><td>Todos</td><td>ECS Fargate (4 ambientes)</td></tr>
+                            <tr><td>10</td><td>API REST headless</td><td>Tienda, .com</td><td>WordPress REST API</td></tr>
+                            <tr><td>11</td><td>Gestión de usuarios básica</td><td>Todos</td><td>WordPress (5 roles fijos)</td></tr>
+                            <tr><td>12</td><td>Plugins de terceros</td><td>Todos</td><td>Ecosistema WordPress</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>Gestión de Contenido</h3>
+                <div class="table-wrapper" style="box-shadow:none;">
+                    <table>
+                        <thead><tr><th>Capacidad</th><th>Nivel</th><th>Justificación</th></tr></thead>
+                        <tbody>
+                            <tr><td>Tipos de contenido personalizados</td><td><span class="badge badge-yellow">🎯 Obligatoria</span></td><td>Cada activo tiene contenidos diferentes. Esquemas flexibles.</td></tr>
+                            <tr><td>Editor WYSIWYG / Rich Text</td><td><span class="badge badge-yellow">🎯 Obligatoria</span></td><td>Equipos de contenido editan sin código.</td></tr>
+                            <tr><td>Versionado de contenido</td><td><span class="badge badge-yellow">🎯 Obligatoria</span></td><td>Ya en PoC. Extender a todos los tipos.</td></tr>
+                            <tr><td>Scheduling (programación)</td><td><span class="badge badge-yellow">🎯 Obligatoria</span></td><td>Blog programa publicaciones diariamente.</td></tr>
+                            <tr><td>Draft / Publish states</td><td><span class="badge badge-yellow">🎯 Obligatoria</span></td><td>Separar borrador de publicado.</td></tr>
+                            <tr><td>Preview en contexto</td><td><span class="badge badge-yellow">🎯 Obligatoria</span></td><td>Ya en PoC — diferenciador vs WordPress.</td></tr>
+                            <tr><td>Slug/URL management</td><td><span class="badge badge-yellow">🎯 Obligatoria</span></td><td>Control de URLs para SEO.</td></tr>
+                            <tr><td>Contenido reusable (bloques)</td><td><span class="badge badge-blue">🟡 Deseable</span></td><td>Reutilizar sin duplicar.</td></tr>
+                            <tr><td>Templates configurables</td><td><span class="badge badge-blue">🟡 Deseable</span></td><td>Negocio crea páginas sin tech.</td></tr>
+                            <tr><td>Contenido relacional</td><td><span class="badge badge-blue">🟡 Deseable</span></td><td>Referencias entre contenidos.</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>Workflow, SEO, Media, API, Seguridad</h3>
+                <div class="table-wrapper" style="box-shadow:none;">
+                    <table>
+                        <thead><tr><th>Capacidad</th><th>Categoría</th><th>Nivel</th></tr></thead>
+                        <tbody>
+                            <tr><td>Workflows de aprobación</td><td>Workflow</td><td><span class="badge badge-yellow">🎯 Obligatoria</span></td></tr>
+                            <tr><td>RBAC granular</td><td>Seguridad</td><td><span class="badge badge-yellow">🎯 Obligatoria</span></td></tr>
+                            <tr><td>Audit trail</td><td>Compliance</td><td><span class="badge badge-yellow">🎯 Obligatoria</span></td></tr>
+                            <tr><td>Meta tags editables</td><td>SEO</td><td><span class="badge badge-yellow">🎯 Obligatoria</span></td></tr>
+                            <tr><td>Sitemaps XML automáticos</td><td>SEO</td><td><span class="badge badge-yellow">🎯 Obligatoria</span></td></tr>
+                            <tr><td>Redirects 301/302</td><td>SEO</td><td><span class="badge badge-yellow">🎯 Obligatoria</span></td></tr>
+                            <tr><td>Datos estructurados (Schema.org)</td><td>SEO</td><td><span class="badge badge-yellow">🎯 Obligatoria</span></td></tr>
+                            <tr><td>Media Library centralizada</td><td>Media</td><td><span class="badge badge-yellow">🎯 Obligatoria</span></td></tr>
+                            <tr><td>Carga masiva (bulk upload)</td><td>Media</td><td><span class="badge badge-yellow">🎯 Obligatoria</span></td></tr>
+                            <tr><td>API REST</td><td>API</td><td><span class="badge badge-yellow">🎯 Obligatoria</span></td></tr>
+                            <tr><td>Multi-tenancy</td><td>Arquitectura</td><td><span class="badge badge-yellow">🎯 Obligatoria</span></td></tr>
+                            <tr><td>Promoción entre ambientes</td><td>DevOps</td><td><span class="badge badge-yellow">🎯 Obligatoria</span></td></tr>
+                            <tr><td>Rollback de contenido</td><td>DevOps</td><td><span class="badge badge-yellow">🎯 Obligatoria</span></td></tr>
+                            <tr><td>SSO/SAML/JWT</td><td>Seguridad</td><td><span class="badge badge-yellow">🎯 Obligatoria</span></td></tr>
+                            <tr><td>Búsqueda para visitantes</td><td>Búsqueda</td><td><span class="badge badge-yellow">🎯 Obligatoria</span></td></tr>
+                            <tr><td>GraphQL</td><td>API</td><td><span class="badge badge-blue">🟡 Deseable</span></td></tr>
+                            <tr><td>Webhooks</td><td>API</td><td><span class="badge badge-blue">🟡 Deseable</span></td></tr>
+                            <tr><td>Multi-idioma</td><td>i18n</td><td><span class="badge badge-blue">🟡 Deseable</span></td></tr>
+                            <tr><td>Feature flags para contenido</td><td>DevOps</td><td style="background:#f3e5f5;"><span style="color:#6a1b9a; font-size:0.75rem; font-weight:500;">⭐ Diferenciadora</span></td></tr>
+                            <tr><td>Content Delivery API vs Management API</td><td>API</td><td style="background:#f3e5f5;"><span style="color:#6a1b9a; font-size:0.75rem; font-weight:500;">⭐ Diferenciadora</span></td></tr>
+                            <tr><td>Alertas de contenido</td><td>Observabilidad</td><td style="background:#f3e5f5;"><span style="color:#6a1b9a; font-size:0.75rem; font-weight:500;">⭐ Diferenciadora</span></td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="card" style="background: linear-gradient(135deg, #fff8e1 0%, #fffde7 100%); border: 1px solid #ffe082;">
+                <h3>Resumen por Prioridad</h3>
+                <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap:var(--spacing-md); margin-top:var(--spacing-md);">
+                    <div style="text-align:center; padding:var(--spacing-md); background:white; border-radius:var(--radius-md); border:2px solid var(--warning);"><div style="font-size:2rem; font-weight:700; color:var(--warning);">27</div><div style="font-size:0.85rem;">🎯 Obligatorias</div><div style="font-size:0.75rem; color:var(--text-secondary);">Sin estas no se reemplaza WP</div></div>
+                    <div style="text-align:center; padding:var(--spacing-md); background:white; border-radius:var(--radius-md); border:2px solid var(--info);"><div style="font-size:2rem; font-weight:700; color:var(--info);">25</div><div style="font-size:0.85rem;">🟡 Deseables</div><div style="font-size:0.75rem; color:var(--text-secondary);">Benchmark de industria</div></div>
+                    <div style="text-align:center; padding:var(--spacing-md); background:white; border-radius:var(--radius-md); border:2px solid #6a1b9a;"><div style="font-size:2rem; font-weight:700; color:#6a1b9a;">3</div><div style="font-size:0.85rem;">⭐ Diferenciadoras</div><div style="font-size:0.75rem; color:var(--text-secondary);">Visión a largo plazo</div></div>
+                    <div style="text-align:center; padding:var(--spacing-md); background:white; border-radius:var(--radius-md); border:2px solid var(--primary-base);"><div style="font-size:2rem; font-weight:700; color:var(--primary-base);">55</div><div style="font-size:0.85rem;">Total mapeadas</div><div style="font-size:0.75rem; color:var(--text-secondary);">Capacidades identificadas</div></div>
+                </div>
+            </div>
+
+            <div class="alert alert-warning">
+                <div class="alert-icon">🚨</div>
+                <div>
+                    <strong>Gap Crítico: 10 capacidades obligatorias NO demostradas en la PoC</strong>
+                    <p>Workflows de aprobación, RBAC granular, SEO completo (meta tags + sitemaps + redirects 301), Scheduling, Carga masiva, Multi-tenancy, Promoción entre ambientes, Búsqueda para visitantes, SSO/JWT, Audit trail. <strong>Estas bloquean la transversalidad</strong> y deben estar en el roadmap del desarrollo.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- COMPARATIVA INTEGRAL -->
+        <div id="comparativa" class="section">
+            <div class="card">
+                <h2>Comparativa Integral — 4 Opciones Principales</h2>
+                <p>Evaluación consolidada de las opciones viables para reemplazar WordPress, considerando el principio de cambio transversal.</p>
+            </div>
+            <div class="table-wrapper">
+                <table>
+                    <thead><tr><th>Criterio</th><th>WordPress (actual)</th><th>⭐ Drupal Headless</th><th>Headless SaaS</th><th>CMS In-House</th></tr></thead>
+                    <tbody>
+                        <tr><td><strong>TCO 5 años</strong></td><td>USD 791,760</td><td><strong>USD 583,740</strong></td><td>USD 1,050,000+</td><td><span class="badge badge-yellow">POR ESTIMAR</span></td></tr>
+                        <tr><td><strong>Tiempo implementación</strong></td><td>— (actual)</td><td>12-16 semanas</td><td>6-8 meses</td><td><span class="badge badge-yellow">POR ESTIMAR</span></td></tr>
+                        <tr><td><strong>Costo infra anual</strong></td><td>USD 6,648</td><td>USD 11,748</td><td>USD 5-8K + SaaS</td><td>~USD 4,152</td></tr>
+                        <tr><td><strong>Cubre Tienda Digital</strong></td><td>✅</td><td>✅</td><td>✅</td><td>✅ (demostrado en PoC)</td></tr>
+                        <tr><td><strong>Cubre Punto Com</strong></td><td>✅</td><td>✅</td><td>✅</td><td>No demostrado (requiere evaluación)</td></tr>
+                        <tr><td><strong>Cubre otros activos</strong></td><td>✅</td><td>✅</td><td>✅</td><td>No evaluado</td></tr>
+                        <tr><td><strong>Tech stack aprobado</strong></td><td><span class="badge badge-red">PHP legacy</span></td><td><span class="badge badge-yellow">PHP (excepción)</span></td><td><span class="badge badge-green">Sí</span></td><td><span class="badge badge-green">Java+Angular+Mongo</span></td></tr>
+                        <tr><td><strong>Config as Code</strong></td><td>Manual</td><td>✅ Nativo</td><td>✅ Via API</td><td>No demostrado en PoC</td></tr>
+                        <tr><td><strong>Workflows aprobación</strong></td><td>Plugin</td><td>✅ Nativo</td><td>✅ Nativo</td><td>No demostrado en PoC</td></tr>
+                        <tr><td><strong>Roles/permisos</strong></td><td>Plugin</td><td>✅ Granular nativo</td><td>✅ Nativo</td><td>No demostrado en PoC</td></tr>
+                        <tr><td><strong>API headless</strong></td><td>REST limitado</td><td>✅ JSON:API + GraphQL</td><td>✅ Nativo</td><td>No demostrado en PoC</td></tr>
+                        <tr><td><strong>Gobernanza</strong></td><td><span class="badge badge-red">Centralizada</span></td><td><span class="badge badge-green">Distribuida</span></td><td><span class="badge badge-yellow">Vendor</span></td><td><span class="badge badge-green">Interna</span></td></tr>
+                        <tr><td><strong>Bus factor</strong></td><td>Bajo</td><td>Bajo</td><td>Bajo</td><td><span class="badge badge-red">A evaluar</span></td></tr>
+                        <tr><td><strong>Escalamiento futuro</strong></td><td>→ WP VIP</td><td>→ Acquia DXP</td><td>→ CDP</td><td>Por definir</td></tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="card">
+                <h3>Evaluación por Principio Rector (Cambio Transversal)</h3>
+                <div class="table-wrapper" style="box-shadow:none;">
+                    <table>
+                        <thead><tr><th>Opción</th><th>¿Cubre TODOS los activos?</th><th>¿Elimina WordPress?</th><th>Viabilidad transversal</th></tr></thead>
+                        <tbody>
+                            <tr><td>A: WP Composable</td><td>✅ (es WordPress mejorado)</td><td>❌ (sigue siendo WP)</td><td>No aplica</td></tr>
+                            <tr style="background:#f0faf5;"><td><strong>B: Drupal Headless</strong></td><td>✅ (capacidades enterprise nativas)</td><td>✅</td><td><span class="badge badge-green">ALTA</span></td></tr>
+                            <tr><td>C: Headless SaaS</td><td>✅ (plataforma completa)</td><td>✅</td><td><span class="badge badge-green">ALTA</span> (pero costoso)</td></tr>
+                            <tr><td>D: In-House</td><td>No demostrado (solo PoC Tienda)</td><td>Potencialmente sí</td><td><span class="badge badge-yellow">POR EVALUAR — requiere POC extendido</span></td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- RECOMENDACIÓN -->
+        <div id="recomendacion" class="section">
+            <div class="card">
+                <h2>Decisión Final — 11 junio 2026</h2>
+                <p>Germán Sánchez (VP Tecnología) aprobó el desarrollo In-House del CMS. La decisión es definitiva. Este informe queda como registro histórico del proceso de evaluación y como base para el seguimiento del desarrollo.</p>
+            </div>
+
+            <div class="recommendation">
+                <h3>Decisión Aprobada: CMS In-House — Fase 1 Tienda Digital, Visión Transversal</h3>
+                <p>Se desarrollará un CMS propio utilizando el stack de Tienda Digital (Java Spring Boot + Angular + MongoDB). El alcance inicial es Tienda Digital como piloto. <strong>La visión transversal fue confirmada ante las áreas funcionales el 12 de junio</strong> — .com, blog y todos los activos que usan WordPress migrarán una vez el piloto demuestre resultados.</p>
+                <ul style="margin-top:var(--spacing-md); padding-left:var(--spacing-lg); opacity:0.95;">
+                    <li><strong>Stack:</strong> Java Spring Boot + Angular + MongoDB (existente)</li>
+                    <li><strong>Equipo:</strong> Equipo de Ernesto Castillo (Tienda Digital)</li>
+                    <li><strong>Product Owner:</strong> Alejandro Llamas (PO actual de Tienda)</li>
+                    <li><strong>Repositorio:</strong> Nuevo repo dentro de cuentas de Tienda Digital</li>
+                    <li><strong>Observabilidad:</strong> Datadog (ya implementado)</li>
+                    <li><strong>Independencia de datos:</strong> Cada proyecto tiene datos independientes; comparten componente de administración</li>
+                    <li><strong>Demo a Germán:</strong> En 1 mes (julio 2026)</li>
+                    <li><strong>Transversalidad:</strong> Confirmada ante áreas funcionales (12 junio). Los resultados del piloto guiarán migraciones futuras.</li>
+                </ul>
+            </div>
+
+            <div class="card" style="margin-top: var(--spacing-lg); border-left: 4px solid var(--warning);">
+                <h3>Riesgos Vigentes que Requieren Seguimiento</h3>
+                <div class="table-wrapper" style="box-shadow:none;">
+                    <table>
+                        <thead><tr><th>Riesgo</th><th>Severidad</th><th>Estado</th></tr></thead>
+                        <tbody>
+                            <tr><td><strong>SEO y posicionamiento</strong> — ~900 contenidos posicionados en el blog. Sin estrategia para preservar SEO en la migración</td><td><span class="badge badge-red">Alto</span></td><td>Se pidió involucrar equipo SEO. Sin plan definido.</td></tr>
+                            <tr><td><strong>Deuda de desacoplamiento</strong> — Diego pidió código portátil, pero operativamente se sigue en repos de Tienda sin cambiar nada</td><td><span class="badge badge-red">Alto</span></td><td>Vigilar en revisión de arquitectura</td></tr>
+                            <tr><td><strong>Plugins sin mapeo</strong> — Plugins críticos en uso: Yoast (SEO), autopauta, carga masiva. Sin equivalente definido en el nuevo CMS</td><td><span class="badge badge-yellow">Medio</span></td><td>Gustavo + Diego harán inventario</td></tr>
+                            <tr><td><strong>Migración de ~900 contenidos</strong> — Contenido del blog ya existente. Esfuerzo significativo reconocido por Gustavo</td><td><span class="badge badge-yellow">Medio</span></td><td>Sin plan definido</td></tr>
+                            <tr><td><strong>Expectativas generadas</strong> — Áreas funcionales (.com, blog) ya saben que les llegará esta herramienta</td><td><span class="badge badge-yellow">Medio</span></td><td>Si se retrasa, habrá frustración</td></tr>
+                            <tr><td><strong>Sin arquitectura formal</strong> — Diego se comprometió a crear diagrama, pendiente de entrega</td><td><span class="badge badge-yellow">Medio</span></td><td>Esperando entrega de Diego</td></tr>
+                            <tr><td><strong>Bus factor</strong> — No se habló de documentación ni plan de continuidad</td><td><span class="badge badge-yellow">Medio</span></td><td>Sin responsable asignado</td></tr>
+                            <tr><td><strong>MongoDB cuestionado por costos</strong> — Diego advirtió que puede ser problema al transversalizar</td><td><span class="badge badge-yellow">Medio</span></td><td>Monitorear cuando crezca</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="card" style="margin-top: var(--spacing-lg); border-left: 4px solid var(--primary-base);">
+                <h3>Nuestro Rol: Acompañamiento y Validación</h3>
+                <p style="margin-bottom: var(--spacing-md);">Ya no evaluamos opciones. Validamos que el desarrollo cumpla estándares, sea escalable y desacoplado.</p>
+                <ul style="padding-left:var(--spacing-lg); color:var(--text-secondary);">
+                    <li><strong>Validar diagrama de arquitectura</strong> — Asegurar escalabilidad y desacoplamiento</li>
+                    <li><strong>Revisar demo en 1 mes</strong> — Verificar cumplimiento de estándares</li>
+                    <li><strong>Monitorear desacoplamiento</strong> — Que el código sea portátil, no atado a Tienda</li>
+                    <li><strong>Participar en inventario de plugins</strong> — Asegurar que funcionalidades críticas (SEO, autopauta) tengan equivalente</li>
+                    <li><strong>Alertar sobre SEO</strong> — 900 contenidos posicionados no se pueden perder</li>
+                    <li><strong>Documentar decisiones</strong> — Mantener registro histórico actualizado</li>
+                </ul>
+            </div>
+
+            <div class="card" style="margin-top:var(--spacing-lg);">
+                <h3>Próximos Checkpoints</h3>
+                <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: var(--spacing-lg); margin-top:var(--spacing-md);">
+                    <div style="padding:var(--spacing-md); background:#fef5f5; border-radius:var(--radius-md);"><strong style="color:var(--error);">Esta Semana (16 jun)</strong><ul style="margin-top:var(--spacing-sm); padding-left:var(--spacing-lg); font-size:0.85rem;"><li>Reunión de arquitectura (miércoles)</li><li>Revisar diagrama de Diego</li><li>Confirmar nombre del repositorio</li></ul></div>
+                    <div style="padding:var(--spacing-md); background:#fff8e1; border-radius:var(--radius-md);"><strong style="color:#856404;">Junio 2026</strong><ul style="margin-top:var(--spacing-sm); padding-left:var(--spacing-lg); font-size:0.85rem;"><li>Inventario de plugins (Gustavo + Diego)</li><li>Definición de tiempos del piloto</li><li>Comunicar fechas a equipos funcionales</li></ul></div>
+                    <div style="padding:var(--spacing-md); background:#f0f7ff; border-radius:var(--radius-md);"><strong style="color:var(--info);">Julio 2026 (~1 mes)</strong><ul style="margin-top:var(--spacing-sm); padding-left:var(--spacing-lg); font-size:0.85rem;"><li>Demo a Germán Sánchez</li><li>¿Código desacoplado y portátil?</li><li>¿Cumple estándares?</li><li>¿Más capacidades que textos/imágenes?</li></ul></div>
+                    <div style="padding:var(--spacing-md); background:#f0faf5; border-radius:var(--radius-md);"><strong style="color:var(--primary-dark);">Post-Piloto</strong><ul style="margin-top:var(--spacing-sm); padding-left:var(--spacing-lg); font-size:0.85rem;"><li>Sesiones individuales con áreas (blog, .com)</li><li>Hoja de ruta definitiva para migraciones</li><li>Estrategia de SEO para migración del blog</li><li>¿Quién asume el CMS a largo plazo?</li></ul></div>
+                </div>
+            </div>
+
+            <div class="card" style="margin-top: var(--spacing-lg); background: var(--bg-light);">
+                <h3>Contexto Histórico: Lo que el análisis recomendaba</h3>
+                <p>El análisis comparativo recomendaba Drupal Headless como opción con TCO verificable más bajo (USD 583,740 en 5 años) y capacidades enterprise demostradas. El desarrollo In-House se identificó como viable pero con riesgos controlables y capacidades no demostradas. La decisión final de Germán priorizó la alineación con el tech stack interno y la velocidad de ejecución del equipo de Tienda sobre las capacidades enterprise verificadas de Drupal.</p>
+                <p style="margin-top:var(--spacing-sm);"><strong>Drupal sigue siendo la alternativa de respaldo</strong> si el desarrollo In-House no escala o no cubre las necesidades de otros dominios en el futuro.</p>
+            </div>
+        </div>
+
+        <!-- FUENTES (complete from original + TASD-411) -->
+        <div id="fuentes" class="section">
+            <div class="card">
+                <h2>Fuentes Consultadas</h2>
+                <p>Todas las fuentes utilizadas en este informe son públicas, vigentes (2024-2026), y provienen de analistas de referencia, vendors oficiales, o publicaciones especializadas en tecnología enterprise.</p>
+            </div>
+            <div class="card">
+                <h3>Reportes de Analistas</h3>
+                <ul class="source-list">
+                    <li><span class="source-num">1</span><div><strong>Gartner Magic Quadrant for Digital Experience Platforms 2025</strong><br><a href="https://www.cxtoday.com/contact-center/gartner-magic-quadrant-for-digital-experience-platforms-2025-the-rundown/" target="_blank">CX Today — Gartner MQ DXP 2025: The Rundown</a><br><span class="source-date">Febrero 2025</span></div></li>
+                    <li><span class="source-num">2</span><div><strong>Forrester Wave: Content Management Systems, Q1 2025</strong><br><a href="https://www.forrester.com/report/RES182086" target="_blank">Forrester — The Forrester Wave: CMS, Q1 2025</a><br><span class="source-date">Marzo 2025</span></div></li>
+                    <li><span class="source-num">3</span><div><strong>Forrester Wave: Digital Experience Platforms, Q4 2025</strong><br><a href="https://cmsmag.net/liferay/forrester-wave-q4-2025/" target="_blank">CMS Mag — Forrester Wave DXP Q4 2025</a><br><span class="source-date">Enero 2026</span></div></li>
+                    <li><span class="source-num">4</span><div><strong>Análisis del Gartner DXP MQ 2025 — Composabilidad y tendencias</strong><br><a href="https://cmscritic.com/some-thoughts-on-the-gartner-digital-experience-platforms-dxp-magic-quadrant-for-2025" target="_blank">CMS Critic — Thoughts on Gartner DXP MQ 2025</a><br><span class="source-date">Mayo 2025</span></div></li>
+                </ul>
+            </div>
+            <div class="card">
+                <h3>Posicionamiento de Vendors</h3>
+                <ul class="source-list">
+                    <li><span class="source-num">5</span><div><strong>WordPress VIP — Reconocido como Strong Performer en Forrester Wave CMS</strong><br><a href="https://wpvip.com/blog/forrester-wave-content-management-system/" target="_blank">WordPress VIP Blog</a><br><span class="source-date">Junio 2025</span></div></li>
+                    <li><span class="source-num">6</span><div><strong>Optimizely — Nombrado Líder en Forrester Wave CMS Q1 2025</strong><br><a href="https://www.prnewswire.com/news-releases/optimizely-named-a-leader-in-content-management-systems-by-leading-independent-research-firm-302409314.html" target="_blank">PRNewswire — Optimizely Leader CMS</a><br><span class="source-date">Marzo 2025</span></div></li>
+                    <li><span class="source-num">7</span><div><strong>Acquia — Líder en Gartner MQ for DXP por 6 años consecutivos</strong><br><a href="https://www.acquia.com/resources/report/acquia-named-leader-2024-gartner-magic-quadranttm-dxp" target="_blank">Acquia — Leader Gartner MQ DXP</a><br><span class="source-date">2025</span></div></li>
+                    <li><span class="source-num">8</span><div><strong>WordPress VIP Pricing — Planes desde $25,000/año</strong><br><a href="https://www.wpvip.com/pricing/" target="_blank">WordPress VIP — Pricing</a><br><span class="source-date">2025</span></div></li>
+                </ul>
+            </div>
+            <div class="card">
+                <h3>Gobernanza y Riesgos</h3>
+                <ul class="source-list">
+                    <li><span class="source-num">9</span><div><strong>Impacto del conflicto WordPress/Automattic vs WP Engine en CMS enterprise</strong><br><a href="https://www.brightspot.com/cms-resources/digital-trends/wordpress-dispute-impact-on-enterprise-content-management" target="_blank">Brightspot — WordPress Dispute Impact</a><br><span class="source-date">Mayo 2025</span></div></li>
+                    <li><span class="source-num">10</span><div><strong>WordPress at a Crossroads: Community Fractures and Uncertain Futures</strong><br><a href="https://ingenious.org/news/article:wordpress-at-a-crossroads-community-fractures-and-uncertain-futures/" target="_blank">Ingenious.org</a><br><span class="source-date">Julio 2025</span></div></li>
+                    <li><span class="source-num">11</span><div><strong>WordPress Enterprise Security: Lessons from 1,500+ Deploys</strong><br><a href="https://wpriders.com/enterprise-wordpress-at-scale-lessons-from-wpriders/" target="_blank">WPRiders</a><br><span class="source-date">2026</span></div></li>
+                </ul>
+            </div>
+            <div class="card">
+                <h3>Costos y Pricing</h3>
+                <ul class="source-list">
+                    <li><span class="source-num">12</span><div><strong>Optimizely Pricing 2026 — Planes desde $36,000/año</strong><br><a href="https://www.gostellar.app/blog/how-much-does-optimizely-cost" target="_blank">GoStellar — Optimizely Pricing</a><br><span class="source-date">2025</span></div></li>
+                    <li><span class="source-num">13</span><div><strong>Contentstack Pricing — Modelo basado en contratos enterprise</strong><br><a href="https://oshyn.com/blog/contentstack-pricing" target="_blank">Oshyn — Contentstack Pricing Guide</a><br><span class="source-date">2026</span></div></li>
+                    <li><span class="source-num">14</span><div><strong>AWS vs Acquia para Drupal Hosting — Comparación de costos reales</strong><br><a href="https://www.tactis.com/articles/blog/aws-vs-acquia-secure-drupal-hosting-what-numbers-really-say" target="_blank">Tactis — AWS vs Acquia Numbers</a><br><span class="source-date">Junio 2025</span></div></li>
+                    <li><span class="source-num">15</span><div><strong>Drupal Pricing — Costos de implementación enterprise</strong><br><a href="https://itqlick.com/drupal/pricing" target="_blank">ITQlick — Drupal Pricing 2026</a><br><span class="source-date">2026</span></div></li>
+                </ul>
+            </div>
+            <div class="card">
+                <h3>Market Share y Tendencias</h3>
+                <ul class="source-list">
+                    <li><span class="source-num">16</span><div><strong>WordPress B2B Enterprise Assessment — Solo 5.7% enterprise</strong><br><a href="https://www.webstacks.com/blog/wordpress-b2b-enterprise-assessment-2026" target="_blank">Webstacks — WordPress Enterprise Assessment 2026</a><br><span class="source-date">2026</span></div></li>
+                    <li><span class="source-num">17</span><div><strong>Top 25+ CMS en 2026 — WordPress 84.2% market share general</strong><br><a href="https://www.wmtips.com/technologies/cms/" target="_blank">WMTips — Top CMS 2026</a><br><span class="source-date">2026</span></div></li>
+                    <li><span class="source-num">18</span><div><strong>AWS ECS Pricing 2026 — Fargate vs EC2 cost comparison</strong><br><a href="https://wring.co/blog/aws-ecs-pricing-guide" target="_blank">Wring — AWS ECS Pricing Guide</a><br><span class="source-date">2026</span></div></li>
+                </ul>
+            </div>
+            <div class="card">
+                <h3>Documentos Internos</h3>
+                <ul class="source-list">
+                    <li><span class="source-num">19</span><div><strong>diagnostico-wordpress-seguros-bolivar.md</strong><br>Diagnóstico arquitectónico + modelo de ambientes<br><span class="source-date">Mayo 2026</span></div></li>
+                    <li><span class="source-num">20</span><div><strong>[TASD-411] Notas Gemini — Reunión socialización propuesta desarrollo In-House CMS</strong><br>Participantes: Ernesto Castillo, Danilo Cortés, Jeisson Gómez, Fabio Barbosa, Juan Valencia, Diego Rodríguez, Gustavo Suárez<br><span class="source-date">12 mayo 2026</span></div></li>
+                    <li><span class="source-num">21</span><div><strong>CMS — Reunión definición técnica y aprobación de desarrollo In-House</strong><br>Participantes: Ernesto Castillo, Diego Rodríguez, Juan Valencia, Jeisson Gómez. Decisión: Germán aprobó desarrollo In-House, fase 1 Tienda Digital.<br><span class="source-date">11 junio 2026</span></div></li>
+                    <li><span class="source-num">22</span><div><strong>Nuevo gestor de contenido (Reemplazo WordPress) — Reunión con áreas funcionales</strong><br>Participantes: Gustavo Suárez, Diego Rodríguez, Juan Valencia, César Benavides, Lessly Alfonso, Angie Rojas, Juan Manuel Galvis. Se confirmó visión transversal ante áreas funcionales. Nuevos riesgos: SEO (~900 contenidos), plugins sin mapeo, migración de contenido existente.<br><span class="source-date">12 junio 2026</span></div></li>
+                </ul>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Modal -->
+    <div class="modal-overlay" id="modalOverlay" onclick="closeModal(event)">
+        <div class="modal">
+            <button class="modal-close" onclick="document.getElementById('modalOverlay').classList.remove('active')">×</button>
+            <h3 id="modalTitle"></h3>
+            <p id="modalDesc"></p>
+        </div>
+    </div>
+
+    <script>
+    // Capabilities data with In-House scores (7th column)
+    // In-House scoring: based on what was demonstrated in the PoC (TASD-411, May 2026)
+    // -1 = not demonstrated (rendered as dashed dots)
+    // Scores > 0 = demonstrated or partially demonstrated
+    const capabilities = [
+        { name: "Gestión de contenido básica", category: "contenido", desc: "Capacidad de crear, editar, organizar y publicar contenido digital (páginas, artículos, media) a través de una interfaz de administración. Incluye editor visual, gestión de media, taxonomías y categorización.", scores: [3, 3, 3, 3, 3, 3, 2] },
+        { name: "Facilidad de uso (editores)", category: "contenido", desc: "Qué tan intuitiva es la interfaz para editores de contenido no técnicos. Considera la curva de aprendizaje, la experiencia de edición visual (WYSIWYG), y la productividad del equipo editorial sin necesidad de soporte técnico.", scores: [3, 3, 2, 2, 2, 3, 3] },
+        { name: "Headless / API-first", category: "tecnico", desc: "Capacidad de entregar contenido a través de APIs (REST o GraphQL) desacopladas del frontend. Permite que el contenido se consuma desde aplicaciones web, móviles, IoT, o cualquier canal digital.", scores: [1, 2, 2, 3, 3, 3, -1] },
+        { name: "Personalización de contenido", category: "experiencia", desc: "Capacidad nativa de mostrar contenido diferente según el perfil, comportamiento, ubicación o segmento del visitante. Implica reglas de segmentación, targeting en tiempo real, y adaptación dinámica.", scores: [0, 1, 1, 3, 3, 3, -1] },
+        { name: "Experimentación / A-B testing", category: "experiencia", desc: "Capacidad nativa de crear variantes de contenido o diseño y medir estadísticamente cuál genera mejores resultados. Optimizely es el referente de la industria en esta capacidad.", scores: [0, 0, 0, 2, 1, 3, -1] },
+        { name: "Multi-sitio / Multi-marca", category: "contenido", desc: "Capacidad de gestionar múltiples sitios web, marcas o propiedades digitales desde una sola instalación o consola de administración.", scores: [2, 3, 3, 3, 3, 3, -1] },
+        { name: "Workflows de aprobación", category: "contenido", desc: "Flujos de trabajo configurables para la revisión y aprobación de contenido antes de su publicación. Incluye estados (borrador, en revisión, aprobado, publicado), asignación de revisores, y auditoría de cambios.", scores: [1, 2, 3, 3, 3, 3, -1] },
+        { name: "Roles y permisos granulares", category: "seguridad", desc: "Sistema de control de acceso que permite definir exactamente qué puede hacer cada usuario o grupo: crear, editar, publicar, eliminar, administrar, por tipo de contenido y por sección del sitio.", scores: [1, 2, 3, 3, 3, 3, -1] },
+        { name: "SEO nativo", category: "experiencia", desc: "Herramientas integradas para optimización en motores de búsqueda: URLs amigables, meta tags, sitemaps XML, datos estructurados (schema.org), canonical URLs, y control de indexación.", scores: [3, 3, 2, 3, 2, 3, -1] },
+        { name: "Internacionalización (i18n)", category: "contenido", desc: "Soporte nativo para gestionar contenido en múltiples idiomas: traducción de contenido, URLs por idioma, detección de idioma del visitante, y flujos de trabajo de traducción.", scores: [2, 2, 3, 3, 3, 3, -1] },
+        { name: "Seguridad enterprise", category: "seguridad", desc: "Capacidades de seguridad a nivel enterprise: autenticación multi-factor (MFA), SSO/SAML, cifrado en reposo y tránsito, auditoría de accesos, protección contra OWASP Top 10, WAF.", scores: [1, 3, 2, 3, 3, 3, -1] },
+        { name: "Compliance (SOC2, ISO, etc.)", category: "seguridad", desc: "Certificaciones de compliance que la plataforma ofrece de forma heredada: SOC 1/2/3, ISO 27001, FedRAMP, HIPAA, PCI-DSS. En self-hosted o in-house, la responsabilidad recae 100% en la organización.", scores: [0, 3, 0, 3, 3, 3, -1] },
+        { name: "AI / GenAI integrado", category: "experiencia", desc: "Capacidades de inteligencia artificial integradas en la plataforma: generación de contenido con IA, resúmenes automáticos, etiquetado inteligente, optimización de SEO con IA.", scores: [1, 2, 1, 2, 3, 3, -1] },
+        { name: "Analytics de contenido", category: "experiencia", desc: "Herramientas nativas de análisis del rendimiento del contenido: métricas de engagement, tiempo en página, conversiones por contenido, contenido trending.", scores: [0, 3, 0, 2, 2, 3, -1] },
+        { name: "CDP (Customer Data Platform)", category: "experiencia", desc: "Plataforma de datos de cliente integrada que unifica perfiles de visitantes desde múltiples fuentes, permite segmentación avanzada, y alimenta la personalización.", scores: [0, 0, 0, 3, 3, 3, -1] },
+        { name: "Ecosistema de plugins/módulos", category: "tecnico", desc: "Cantidad y calidad de extensiones disponibles para agregar funcionalidad. WordPress tiene ~60,000 plugins; Drupal tiene ~50,000 módulos contribuidos.", scores: [3, 3, 3, 2, 2, 2, 0] },
+        { name: "Composabilidad / Integraciones", category: "tecnico", desc: "Capacidad de integrarse fácilmente con otras herramientas del stack tecnológico (CRM, ERP, DAM, CDP, commerce) a través de APIs, webhooks, y conectores pre-construidos.", scores: [1, 2, 2, 3, 3, 3, -1] },
+        { name: "Gobernanza del proyecto", category: "operativo", desc: "Estructura de gobernanza del proyecto open-source o del vendor. WordPress tiene gobernanza centralizada en Automattic. Drupal tiene la Drupal Association (sin ánimo de lucro). In-House tiene gobernanza interna total.", scores: [1, 1, 3, 3, 3, 3, 3] },
+        { name: "Soporte enterprise (SLA)", category: "operativo", desc: "Disponibilidad de soporte técnico con acuerdos de nivel de servicio (SLA) garantizados: tiempos de respuesta, uptime garantizado (99.95%+), soporte 24/7.", scores: [0, 3, 0, 3, 3, 3, -1] },
+        { name: "Talento disponible en LATAM", category: "operativo", desc: "Disponibilidad de desarrolladores, implementadores y agencias con experiencia en la plataforma en la región de América Latina.", scores: [3, 3, 2, 2, 1, 1, 3] }
+    ];
+
+    function renderTable(filter) {
+        const tbody = document.getElementById('capBody');
+        tbody.innerHTML = '';
+        const filtered = filter === 'all' ? capabilities : capabilities.filter(c => c.category === filter);
+        filtered.forEach(cap => {
+            const tr = document.createElement('tr');
+            tr.dataset.category = cap.category;
+            let html = '<td><span class="cap-name" onclick="showCapDetail(\'' + cap.name.replace(/'/g, "\\'") + '\')">' + cap.name + '</span></td>';
+            cap.scores.forEach((score, idx) => {
+                if (idx < 6) {
+                    html += '<td>' + renderDots(score) + '</td>';
+                } else {
+                    html += '<td>' + renderDotsInHouse(score) + '</td>';
+                }
+            });
+            tr.innerHTML = html;
+            tbody.appendChild(tr);
+        });
+    }
+
+    function renderDots(score) {
+        let dots = '';
+        for (let i = 0; i < 3; i++) { dots += '<span class="dot ' + (i < score ? 'filled' : 'empty') + '"></span>'; }
+        return '<span class="rating">' + dots + '</span>';
+    }
+
+    function renderDotsInHouse(score) {
+        if (score === -1) {
+            return '<span class="rating"><span class="dot na"></span><span class="dot na"></span><span class="dot na"></span></span>';
+        }
+        let dots = '';
+        for (let i = 0; i < 3; i++) { dots += '<span class="dot ' + (i < score ? 'filled' : 'empty') + '"></span>'; }
+        return '<span class="rating">' + dots + '</span>';
+    }
+
+    function filterCaps(category, btn) {
+        document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
+        btn.classList.add('active');
+        renderTable(category);
+    }
+
+    function showCapDetail(name) {
+        const cap = capabilities.find(c => c.name === name);
+        if (!cap) return;
+        document.getElementById('modalTitle').textContent = cap.name;
+        document.getElementById('modalDesc').textContent = cap.desc;
+        document.getElementById('modalOverlay').classList.add('active');
+    }
+
+    function closeModal(e) {
+        if (e.target === e.currentTarget) { e.currentTarget.classList.remove('active'); }
+    }
+
+    function showSection(id) {
+        document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+        document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+        document.getElementById(id).classList.add('active');
+        event.target.classList.add('active');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    document.addEventListener('keydown', e => {
+        if (e.key === 'Escape') { document.getElementById('modalOverlay').classList.remove('active'); }
+    });
+
+    renderTable('all');
+    </script>
+</body>
+</html>
