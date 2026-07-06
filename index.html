@@ -512,50 +512,84 @@
                 <h3>Gestión de Contenido</h3>
                 <div class="table-wrapper" style="box-shadow:none;">
                     <table>
-                        <thead><tr><th>Capacidad</th><th>Nivel</th><th>Justificación</th></tr></thead>
+                        <thead><tr><th>Capacidad</th><th>Nivel</th><th>Descripción y Valor</th></tr></thead>
                         <tbody>
-                            <tr><td>Tipos de contenido personalizados</td><td><span class="badge badge-yellow">🎯 Obligatoria</span></td><td>Cada activo tiene contenidos diferentes. Esquemas flexibles.</td></tr>
-                            <tr><td>Editor WYSIWYG / Rich Text</td><td><span class="badge badge-yellow">🎯 Obligatoria</span></td><td>Equipos de contenido editan sin código.</td></tr>
-                            <tr><td>Versionado de contenido</td><td><span class="badge badge-yellow">🎯 Obligatoria</span></td><td>Ya en PoC. Extender a todos los tipos.</td></tr>
-                            <tr><td>Scheduling (programación)</td><td><span class="badge badge-yellow">🎯 Obligatoria</span></td><td>Blog programa publicaciones diariamente.</td></tr>
-                            <tr><td>Draft / Publish states</td><td><span class="badge badge-yellow">🎯 Obligatoria</span></td><td>Separar borrador de publicado.</td></tr>
-                            <tr><td>Preview en contexto</td><td><span class="badge badge-yellow">🎯 Obligatoria</span></td><td>Ya en PoC — diferenciador vs WordPress.</td></tr>
-                            <tr><td>Slug/URL management</td><td><span class="badge badge-yellow">🎯 Obligatoria</span></td><td>Control de URLs para SEO.</td></tr>
-                            <tr><td>Contenido reusable (bloques)</td><td><span class="badge badge-blue">🟡 Deseable</span></td><td>Reutilizar sin duplicar.</td></tr>
-                            <tr><td>Templates configurables</td><td><span class="badge badge-blue">🟡 Deseable</span></td><td>Negocio crea páginas sin tech.</td></tr>
-                            <tr><td>Contenido relacional</td><td><span class="badge badge-blue">🟡 Deseable</span></td><td>Referencias entre contenidos.</td></tr>
+                            <tr><td>Tipos de contenido personalizados</td><td><span class="badge badge-yellow">🎯 Obligatoria</span></td><td>Definir estructuras diferentes para cada necesidad (artículo, banner, landing, producto). Cada activo de SB tiene necesidades distintas.</td></tr>
+                            <tr><td>Editor WYSIWYG / Rich Text</td><td><span class="badge badge-yellow">🎯 Obligatoria</span></td><td>Editor visual para dar formato sin código. Los equipos de contenido no son técnicos — editan diariamente sin depender de desarrollo.</td></tr>
+                            <tr><td>Versionado de contenido</td><td><span class="badge badge-yellow">🎯 Obligatoria</span></td><td>Cada cambio guardado como versión identificable con historial y comparación. Crítico para auditoría y revertir errores. Ya en PoC.</td></tr>
+                            <tr><td>Scheduling (programación)</td><td><span class="badge badge-yellow">🎯 Obligatoria</span></td><td>Configurar fecha/hora futura de publicación automática. El equipo de blog programa con días de anticipación.</td></tr>
+                            <tr><td>Draft / Publish states</td><td><span class="badge badge-yellow">🎯 Obligatoria</span></td><td>Separar borrador (solo editores) de publicado (visitantes). Evita publicar contenido incompleto o sin aprobar.</td></tr>
+                            <tr><td>Preview en contexto</td><td><span class="badge badge-yellow">🎯 Obligatoria</span></td><td>Ver cómo quedará el contenido en el sitio final ANTES de publicar. Diferenciador de la PoC vs WordPress actual.</td></tr>
+                            <tr><td>Slug/URL management</td><td><span class="badge badge-yellow">🎯 Obligatoria</span></td><td>Control de URLs amigables para SEO (generación automática + edición manual). Impacta posicionamiento de 900 contenidos.</td></tr>
+                            <tr><td>Contenido reusable (bloques)</td><td><span class="badge badge-blue">🟡 Deseable</span></td><td>Crear un bloque una vez y reutilizarlo en múltiples páginas. Si se actualiza, se actualiza en todos los lugares.</td></tr>
+                            <tr><td>Templates configurables</td><td><span class="badge badge-blue">🟡 Deseable</span></td><td>Estructuras pre-definidas que negocio instancia sin intervención de desarrollo. Empodera al equipo de mercadeo.</td></tr>
+                            <tr><td>Contenido relacional</td><td><span class="badge badge-blue">🟡 Deseable</span></td><td>Vincular contenidos entre sí (artículo→producto, landing→artículos). Permite experiencias conectadas.</td></tr>
                         </tbody>
                     </table>
                 </div>
             </div>
 
             <div class="card">
-                <h3>Workflow, SEO, Media, API, Seguridad</h3>
+                <h3>Workflow Editorial y Colaboración</h3>
                 <div class="table-wrapper" style="box-shadow:none;">
                     <table>
-                        <thead><tr><th>Capacidad</th><th>Categoría</th><th>Nivel</th></tr></thead>
+                        <thead><tr><th>Capacidad</th><th>Nivel</th><th>Descripción y Valor</th></tr></thead>
                         <tbody>
-                            <tr><td>Workflows de aprobación</td><td>Workflow</td><td><span class="badge badge-yellow">🎯 Obligatoria</span></td></tr>
-                            <tr><td>RBAC granular</td><td>Seguridad</td><td><span class="badge badge-yellow">🎯 Obligatoria</span></td></tr>
-                            <tr><td>Audit trail</td><td>Compliance</td><td><span class="badge badge-yellow">🎯 Obligatoria</span></td></tr>
-                            <tr><td>Meta tags editables</td><td>SEO</td><td><span class="badge badge-yellow">🎯 Obligatoria</span></td></tr>
-                            <tr><td>Sitemaps XML automáticos</td><td>SEO</td><td><span class="badge badge-yellow">🎯 Obligatoria</span></td></tr>
-                            <tr><td>Redirects 301/302</td><td>SEO</td><td><span class="badge badge-yellow">🎯 Obligatoria</span></td></tr>
-                            <tr><td>Datos estructurados (Schema.org)</td><td>SEO</td><td><span class="badge badge-yellow">🎯 Obligatoria</span></td></tr>
-                            <tr><td>Media Library centralizada</td><td>Media</td><td><span class="badge badge-yellow">🎯 Obligatoria</span></td></tr>
-                            <tr><td>Carga masiva (bulk upload)</td><td>Media</td><td><span class="badge badge-yellow">🎯 Obligatoria</span></td></tr>
-                            <tr><td>API REST</td><td>API</td><td><span class="badge badge-yellow">🎯 Obligatoria</span></td></tr>
-                            <tr><td>Multi-tenancy</td><td>Arquitectura</td><td><span class="badge badge-yellow">🎯 Obligatoria</span></td></tr>
-                            <tr><td>Promoción entre ambientes</td><td>DevOps</td><td><span class="badge badge-yellow">🎯 Obligatoria</span></td></tr>
-                            <tr><td>Rollback de contenido</td><td>DevOps</td><td><span class="badge badge-yellow">🎯 Obligatoria</span></td></tr>
-                            <tr><td>SSO/SAML/JWT</td><td>Seguridad</td><td><span class="badge badge-yellow">🎯 Obligatoria</span></td></tr>
-                            <tr><td>Búsqueda para visitantes</td><td>Búsqueda</td><td><span class="badge badge-yellow">🎯 Obligatoria</span></td></tr>
-                            <tr><td>GraphQL</td><td>API</td><td><span class="badge badge-blue">🟡 Deseable</span></td></tr>
-                            <tr><td>Webhooks</td><td>API</td><td><span class="badge badge-blue">🟡 Deseable</span></td></tr>
-                            <tr><td>Multi-idioma</td><td>i18n</td><td><span class="badge badge-blue">🟡 Deseable</span></td></tr>
-                            <tr><td>Feature flags para contenido</td><td>DevOps</td><td style="background:#f3e5f5;"><span style="color:#6a1b9a; font-size:0.75rem; font-weight:500;">⭐ Diferenciadora</span></td></tr>
-                            <tr><td>Content Delivery API vs Management API</td><td>API</td><td style="background:#f3e5f5;"><span style="color:#6a1b9a; font-size:0.75rem; font-weight:500;">⭐ Diferenciadora</span></td></tr>
-                            <tr><td>Alertas de contenido</td><td>Observabilidad</td><td style="background:#f3e5f5;"><span style="color:#6a1b9a; font-size:0.75rem; font-weight:500;">⭐ Diferenciadora</span></td></tr>
+                            <tr><td>Workflows de aprobación</td><td><span class="badge badge-yellow">🎯 Obligatoria</span></td><td>Flujos configurables (borrador→revisión→aprobado→publicado). En sector financiero, publicar info errónea de seguros tiene implicaciones legales.</td></tr>
+                            <tr><td>RBAC granular</td><td><span class="badge badge-yellow">🎯 Obligatoria</span></td><td>Permisos por tipo de contenido, campo y acción. El equipo de blog no debe editar contenido de tienda y viceversa.</td></tr>
+                            <tr><td>Audit trail</td><td><span class="badge badge-yellow">🎯 Obligatoria</span></td><td>Registro inmutable de toda acción (quién, qué, cuándo). Requisito de compliance para entidades vigiladas por la SFC.</td></tr>
+                            <tr><td>Lock/unlock de contenido</td><td><span class="badge badge-blue">🟡 Deseable</span></td><td>Bloquear contenido durante edición para evitar conflictos cuando múltiples editores trabajan el mismo activo.</td></tr>
+                            <tr><td>Asignación de tareas</td><td><span class="badge badge-blue">🟡 Deseable</span></td><td>Asignar contenido específico a un editor con seguimiento de estado. Da visibilidad al PO sobre el pipeline editorial.</td></tr>
+                            <tr><td>Comentarios/notas internas</td><td><span class="badge badge-blue">🟡 Deseable</span></td><td>Notas dentro del contenido para feedback entre editores y aprobadores, sin ser visibles para visitantes.</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>SEO y Marketing</h3>
+                <div class="table-wrapper" style="box-shadow:none;">
+                    <table>
+                        <thead><tr><th>Capacidad</th><th>Nivel</th><th>Descripción y Valor</th></tr></thead>
+                        <tbody>
+                            <tr><td>Meta tags editables</td><td><span class="badge badge-yellow">🎯 Obligatoria</span></td><td>Title tag, meta description y Open Graph editables por contenido. ~900 contenidos posicionados dependen de estos campos.</td></tr>
+                            <tr><td>Sitemaps XML automáticos</td><td><span class="badge badge-yellow">🎯 Obligatoria</span></td><td>Archivo XML generado automáticamente para indexación rápida en Google. Sin sitemap, contenido nuevo tarda semanas en aparecer.</td></tr>
+                            <tr><td>URLs canónicas</td><td><span class="badge badge-yellow">🎯 Obligatoria</span></td><td>Indica a Google la URL "oficial" de cada contenido. Evita penalizaciones por contenido duplicado.</td></tr>
+                            <tr><td>Datos estructurados (Schema.org)</td><td><span class="badge badge-yellow">🎯 Obligatoria</span></td><td>JSON-LD que permite rich snippets en Google (estrellas, FAQs, precios). Aumenta CTR y visibilidad.</td></tr>
+                            <tr><td>Redirects 301/302</td><td><span class="badge badge-yellow">🎯 Obligatoria</span></td><td>Redirigir URLs viejas a nuevas transfiriendo SEO acumulado. CRÍTICO para migración de 900 contenidos sin perder posicionamiento.</td></tr>
+                            <tr><td>Análisis de legibilidad</td><td><span class="badge badge-blue">🟡 Deseable</span></td><td>Evalúa claridad del texto y sugiere mejoras. Útil para artículos educativos sobre seguros.</td></tr>
+                            <tr><td>Integración Search Console/Analytics</td><td><span class="badge badge-blue">🟡 Deseable</span></td><td>Ver métricas de rendimiento de cada contenido desde el admin. Decisiones editoriales basadas en datos.</td></tr>
+                            <tr><td>Open Graph / Social previews</td><td><span class="badge badge-blue">🟡 Deseable</span></td><td>Control de cómo se ve el contenido al compartir en redes. Preview profesional cuando mercadeo comparte en LinkedIn/Facebook.</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>Media, API, Multi-tenancy, DevOps, Seguridad y Observabilidad</h3>
+                <div class="table-wrapper" style="box-shadow:none;">
+                    <table>
+                        <thead><tr><th>Capacidad</th><th>Categoría</th><th>Nivel</th><th>Descripción y Valor</th></tr></thead>
+                        <tbody>
+                            <tr><td>Media Library centralizada</td><td>Media</td><td><span class="badge badge-yellow">🎯</span></td><td>Repositorio único para todos los archivos. Sin esto, archivos se pierden y duplican entre activos.</td></tr>
+                            <tr><td>Carga masiva (bulk upload)</td><td>Media</td><td><span class="badge badge-yellow">🎯</span></td><td>Subir múltiples archivos de una vez. El equipo de blog lo usa activamente para lotes de artículos.</td></tr>
+                            <tr><td>Transformación de imágenes</td><td>Media</td><td><span class="badge badge-blue">🟡</span></td><td>Generar variantes automáticas (thumbnail, banner, mobile). Mejora Core Web Vitals.</td></tr>
+                            <tr><td>API REST</td><td>API</td><td><span class="badge badge-yellow">🎯</span></td><td>Endpoints JSON para que Angular consuma contenido. Base de la arquitectura headless actual.</td></tr>
+                            <tr><td>Documentación API (OpenAPI)</td><td>API</td><td><span class="badge badge-blue">🟡</span></td><td>Especificación formal de endpoints. Cuando sea transversal, otros equipos necesitarán integrar sin soporte directo.</td></tr>
+                            <tr><td>GraphQL</td><td>API</td><td><span class="badge badge-blue">🟡</span></td><td>Pedir exactamente los campos necesarios en una petición. Alineado con Data Operativa de SB.</td></tr>
+                            <tr><td>Webhooks</td><td>API</td><td><span class="badge badge-blue">🟡</span></td><td>Notificaciones automáticas al publicar (ej: invalidar cache CloudFront sin intervención manual).</td></tr>
+                            <tr><td>Content Delivery vs Management API</td><td>API</td><td style="background:#f3e5f5;"><span style="color:#6a1b9a; font-size:0.75rem; font-weight:500;">⭐</span></td><td>Separar API pública (cacheable, alto rendimiento) de privada (autenticada). Patrón Contentful/Sanity.</td></tr>
+                            <tr><td>Multi-tenancy</td><td>Arquitectura</td><td><span class="badge badge-yellow">🎯</span></td><td>Datos independientes por proyecto. Confirmado reunión 12 junio. Sin esto, un error afecta a todos.</td></tr>
+                            <tr><td>Admin compartido</td><td>Arquitectura</td><td><span class="badge badge-yellow">🎯</span></td><td>Misma UI para todos los proyectos. Un solo desarrollo, una curva de aprendizaje.</td></tr>
+                            <tr><td>Promoción entre ambientes</td><td>DevOps</td><td><span class="badge badge-yellow">🎯</span></td><td>Mover contenido DEV→PROD de forma controlada. Sin resolver desde mayo 2026.</td></tr>
+                            <tr><td>Rollback de contenido</td><td>DevOps</td><td><span class="badge badge-yellow">🎯</span></td><td>Revertir a versión anterior con un clic. Si se publica precio incorrecto, rollback limita el impacto.</td></tr>
+                            <tr><td>Feature flags para contenido</td><td>DevOps</td><td style="background:#f3e5f5;"><span style="color:#6a1b9a; font-size:0.75rem; font-weight:500;">⭐</span></td><td>Contenido visible solo en ciertos ambientes/segmentos. Testing A/B de copys sin riesgo.</td></tr>
+                            <tr><td>SSO/SAML/JWT</td><td>Seguridad</td><td><span class="badge badge-yellow">🎯</span></td><td>Autenticación con credenciales corporativas. Usuarios locales son riesgo de seguridad institucional.</td></tr>
+                            <tr><td>RBAC granular</td><td>Seguridad</td><td><span class="badge badge-yellow">🎯</span></td><td>Permisos por tipo/campo/acción. Principio de mínimo privilegio obligatorio en sector financiero.</td></tr>
+                            <tr><td>Audit log</td><td>Compliance</td><td><span class="badge badge-yellow">🎯</span></td><td>Registro inmutable de toda acción. Ante auditoría SFC, demostrar quién publicó qué y cuándo.</td></tr>
+                            <tr><td>Búsqueda para visitantes</td><td>Búsqueda</td><td><span class="badge badge-yellow">🎯</span></td><td>Motor de búsqueda público para 900+ contenidos. Sin esto, visitantes no encuentran información específica.</td></tr>
+                            <tr><td>Multi-idioma</td><td>i18n</td><td><span class="badge badge-blue">🟡</span></td><td>Contenido en múltiples idiomas. Si SB expande a otros países, el CMS ya estaría preparado.</td></tr>
+                            <tr><td>Alertas de contenido</td><td>Observabilidad</td><td style="background:#f3e5f5;"><span style="color:#6a1b9a; font-size:0.75rem; font-weight:500;">⭐</span></td><td>Notificaciones automáticas cuando hay contenido que necesita atención (expirado, sin publicar). Evita que nada se pierda.</td></tr>
                         </tbody>
                     </table>
                 </div>
