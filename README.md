@@ -1,2 +1,2 @@
-# analisis-cms-seguros-boliva
+# analisis-cms-seguros-bolivar
 Análisis integral de CMS - Seguros Bolívar
